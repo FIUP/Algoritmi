@@ -38,11 +38,6 @@ def buildGraphInDegreeDistribution(node_list):
 
     return distribution
 
-def distributionInDegree(in_degree, totNodes):
-    for grade in in_degree:
-        grade = grade / totNodes
-
-
 
 node_list = buildGraphAdjacencyMatrix("Cit-HepTh.txt")
 in_degree = buildGraphInDegreeDistribution(node_list)
