@@ -1,4 +1,3 @@
-
 import utils.buildGraphInDegreeDistribution as bG
 from utils.inDegree import inDegree
 import numpy
