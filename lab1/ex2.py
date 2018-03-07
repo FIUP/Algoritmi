@@ -14,9 +14,9 @@ import random
 def generateERGraph(n,p):
     V = [inDegree(i,0) for i in range(n)]
     i = 0
-    while (i < len(V)):
+    for i in range(0,len(V)):
         j = 0
-        while (j < len(V)):
+        for j in range(0,len(V)):
             a = random.random()
             if (a < p and i != j):
                 V[j].in_degree = V[j].in_degree + 1
@@ -24,8 +24,10 @@ def generateERGraph(n,p):
         i = i + 1
     return V
 
-graphER = generateERGraph(1000,0.15)
-in_degree = bG.buildGraphInDegreeDistribution(graphER,1000)
-in_degree = list(map(lambda x: x/1000, in_degree))
-pyp.loglog([i for i in range(1000)],in_degree)
+n = 1000
+p = 0.15
+graphER = generateERGraph(n,p)
+in_degree = bG.buildGraphInDegreeDistribution(graphER,n)
+in_degree = list(map(lambda x: x/n, in_degree))
+pyp.loglog([i for i in range(n)],in_degree)
 pyp.show()
