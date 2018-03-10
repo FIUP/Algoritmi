@@ -1,32 +1,32 @@
-from utils.inDegree import inDegree 
+import numpy as np
+import matplotlib.pyplot as pyp
 
-def buildGraphAdjacencyMatrix(file_name):
-    f = open(file_name)
-    i = 0
-    node_list = []
-    for line in f:
-        for word in line.split():
-           if i == 0:
-               from_node_id = word
-               i = i + 1
-           else:
-               to_node_id = word
-               j = 0 
-               if(isInTheList(to_node_id,node_list)):
-                   node_list[j].inDegree = node_list[j].inDegree + 1
-               else:
-                    
-               i = 0
+f = np.loadtxt("Cit-HepTh.txt", delimiter="\t")
 
+E = set()
+V = set()
 
-def isInTheList(id,node_list):
-    j = 0
-    while j < len(node_list):
-        if(id == node_list[j].id_node)
-            return True
-    return False 
+# Creo E e V
+for line in f:
+    V.add(line[0])
+    V.add(line[1])
+    E.add(tuple(line))
 
+#Calcolo l'in-degree di ogni nodo
+in_degree = dict()
+for node in V:
+    in_degree[node] = 0
 
-    
-buildGraphAdjacencyMatrix("Cit-HepTh.txt")
+for (_, n) in E:
+    in_degree[n] += 1
 
+#Calcolo la distribuzione dell'in-degree
+distribution = np.zeros(27770)
+for node in in_degree:
+    distribution[in_degree[node]] += 1
+
+#Normalizzazione
+distribution = list(map(lambda x : x/27770, distribution))
+
+pyp.loglog(distribution)
+pyp.show()
