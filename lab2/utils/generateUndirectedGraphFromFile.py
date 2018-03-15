@@ -3,11 +3,11 @@ import itertools
 from collections import defaultdict
 import numpy as np
 
-class generateGraphFromFile:
+class generateUndirectedGraphFromFile:
     def __init__(self,path):
         self.path = path
-        self.E = set()
         self.V = set()
+        self.E = set()
         # lista delle adj: e un dizionario il quale associa un set ad ogni chiave. Il set contiene i nodi adiacenti
         self.adj_list = defaultdict(set)
         f = np.loadtxt(self.path, delimiter="\t")
@@ -29,5 +29,5 @@ class generateGraphFromFile:
         print self.E
         print self.adj_list
 
-# generateGraphFromFile("../as19991212.txt")
+# generateUndirectedGraphFromFile("../as19991212.txt")
 
