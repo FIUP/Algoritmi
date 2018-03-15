@@ -15,9 +15,9 @@ class generateUndirectedGraphER:
             for pairs in itertools.combinations(self.V,2):
                 if random.random() < p and pairs[0] != pairs[1]:
                     self.E.add(pairs)
-            print self.V
-            print self.E
+            # print self.V
+            # print self.E
         else:
             print "Error: p must be in [0,1]"
 
-generateUndirectedGraphER(4,0.3)
+# generateUndirectedGraphER(4,0.3)

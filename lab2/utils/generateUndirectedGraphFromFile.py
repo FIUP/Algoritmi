@@ -23,7 +23,8 @@ class generateUndirectedGraphFromFile:
             # itertools.combination: https://stackoverflow.com/questions/35047737/unordered-pairs-pair-sets-in-python-from-a-list
             for edge in itertools.combinations(l,2):
                 # senza sorted(edge) otterremmo una lista che distingue le coppie non ordinate
-                self.E.add(tuple(sorted(edge)))
+                if edge[1] != edge[2]:
+                    self.E.add(tuple(sorted(edge)))
             self.adj_list[l[0]].add(l[1])
         print self.V
         print self.E
