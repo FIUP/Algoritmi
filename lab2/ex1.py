@@ -9,12 +9,13 @@ Dopo aver calcolato la resilienza dei tre grafi, mostrate il risultato in un gra
 lineare (non log/log) che combini le tre curve ottenute. Usate un grafico a punti oppure a linea
 per ognuna delle curve.
 L'asse orizzontale del grafico deve corrispondere al numero di nodi disattivati dall'attacco (che variano da 0 a n),
-mentre l'asse verticale alla dimensione della componente connessa più grande rimasta dopo aver rimosso un certo numero di nodi.
+mentre l'asse verticale alla dimensione della componente connessa piu grande rimasta dopo aver rimosso un certo numero di nodi.
 Aggiungete una legenda al grafico che permetta di distinguere le tre curve e che specifici i valori di p e m utilizzati.
 Allegate il file con la figura nell'apposito spazio.'''
 
-from utils.generateUndirectedGraphFromFile import generateUndirectedGraphFromFile
 from utils.generateUndirectedGraphER import generateUndirectedGraphER
+from utils.generateUndirectedGraphFromFile import generateUndirectedGraphFromFile
+import random
 n = 1476
 p = 0.15 #(n archi*100/n^2)
 m = 1
@@ -31,4 +32,30 @@ def resilience(graph):
             comp = DFSVisited(graph,i,[])
 
 def DFSVisited(graph,u,visited):
+    graph
+
+def randomAttack(graph):
+    # print("Graph to attack: ",graph.adj_list)
+    random_node = -1
+    L = []
+    # seleziona un nodo casuale dalla lista delle adiacenze se il grafo non vuoto
+    if graph and graph.adj_list:
+        random_node = random.choice(graph.adj_list.keys())
+        # e ne estraggo la relativa lista dei nodi adiacenti
+        L = graph.adj_list[random_node]
+        # print("random node: ",random_node)
+        # print("list: ",L)
     
+    #rimuovo il nodo estratto casualmente da tutte le liste delle adj nel quale compare
+    for nodes in L:
+        if random_node in graph.adj_list[nodes]:
+            graph.adj_list[nodes].remove(random_node)
+    
+    # infine rimuovo la chiave corrispondente al nodo estratto casualmente
+    graph.adj_list.pop(random_node, None)
+
+    # print("final graph: ",graph.adj_list)
+
+
+#randomAttack(generalGraph)
+#randomAttack(ERgraph)

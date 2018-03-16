@@ -24,4 +24,4 @@ class generateUndirectedGraphFromFile:
                 self.adj_list[l[0]].add(l[1])
         #print self.V
         #print self.E
-        print(self.adj_list)
+        #print(self.adj_list)
