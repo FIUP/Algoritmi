@@ -19,16 +19,35 @@ n = 1476
 p = 0.15 #(n archi*100/n^2)
 m = 1
 
-generalGraph = generateUndirectedGraphFromFile("as19991212.txt")
-ERgraph = generateUndirectedGraphER(n,p)
-# UPAgraph =
+def DFSVisited(graph,u,visited,color):
+    visited = set(visited)
+    color[u] = "gray"
+    print(visited)
+    visited.add(u)
+    for v in graph.adj_list[u]:
+        if (color[v] == "white"):
+            visited = DFSVisited(graph,v,visited,color)
+    color[u] = "black"
+    return visited
 
 def resilience(graph):
-    color = ["white" for i in range(len(graph.V))]
+    color = dict()
+    for i in graph.V:
+        color[i] = "white"
     CC = []
-    for i in range(len(graph.V)):
+    visited = set()
+    for i in graph.V:
         if (color[i] == "white"):
-            comp = DFSVisited(graph,i,[])
+            comp = DFSVisited(graph,i,visited,color)
+            CC.extend(comp)
+    return CC
 
-def DFSVisited(graph,u,visited):
-    
+
+
+
+generalGraph = generateUndirectedGraphFromFile("as19991212.txt")
+ERgraph = generateUndirectedGraphER(n,p)
+resilienceER = resilience(generalGraph)
+# UPAgraph =
+for c in resilienceER:
+    print(len(c))
