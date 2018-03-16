@@ -48,7 +48,7 @@ def randomAttack(graph):
     
     #rimuovo il nodo estratto casualmente da tutte le liste delle adj nel quale compare
     for nodes in L:
-        if random_node in graph.adj_list[nodes]:
+        if random_node in graph.adj_list[nodes]: # TODO: ma questo controllo serve??
             graph.adj_list[nodes].remove(random_node)
     
     # infine rimuovo la chiave corrispondente al nodo estratto casualmente
