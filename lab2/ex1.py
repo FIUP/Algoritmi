@@ -16,8 +16,8 @@ Allegate il file con la figura nell'apposito spazio.'''
 from utils.graphGenerator import graphGenerator
 import random
 
-n = 1476
-p = 0.15 #(n archi*100/n^2)
+n = 3
+p = 1 #(n archi*100/n^2)
 m = 1
 path = "as19991212.txt"
 
@@ -51,7 +51,7 @@ def randomAttack(graph):
     L = []
     # seleziona un nodo casuale dalla lista delle adiacenze se il grafo non vuoto
     if graph and graph.adj_list:
-        random_node = random.choice(graph.adj_list.keys())
+        random_node = random.choice(list(graph.adj_list.keys()))
         # e ne estraggo la relativa lista dei nodi adiacenti
         L = graph.adj_list[random_node]
         # print("random node: ",random_node)
