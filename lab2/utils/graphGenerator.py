@@ -1,5 +1,5 @@
-from generateUndirectedGraphFromFile import generateUndirectedGraphFromFile
-from generateUndirectedGraphER import generateUndirectedGraphER
+from .generateUndirectedGraphFromFile import generateUndirectedGraphFromFile
+from .generateUndirectedGraphER import generateUndirectedGraphER
 
 class graphGenerator:
     def __init__(self,path,n,p):

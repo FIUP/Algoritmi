@@ -23,9 +23,7 @@ path = "as19991212.txt"
 
 
 def DFSVisited(graph,u,visited,color):
-    visited = set(visited)
     color[u] = "gray"
-    print(visited)
     visited.add(u)
     for v in graph.adj_list[u]:
         if (color[v] == "white"):
@@ -43,7 +41,7 @@ def resilience(graph):
     for i in graph.V:
         if (color[i] == "white"):
             comp = DFSVisited(graph,i,visited,color)
-            CC.extend(comp)
+            CC.append(comp)
     return CC
 
 
@@ -68,11 +66,16 @@ def randomAttack(graph):
     graph.adj_list.pop(random_node, None)
 
     # print("final graph: ",graph.adj_list)
-
+    #newresilience = resilience(graph)
+    #for i in res:
+        #print(len(i))
 
 all_graphs = graphGenerator(path,n,p)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
+res = resilience(generalGraph)
+for i in res:
+    print(len(i))
 # UPAgraph = all_graphs.UPA_graph
 randomAttack(generalGraph)
-randomAttack(ERgraph)
+#randomAttack(ERgraph)
