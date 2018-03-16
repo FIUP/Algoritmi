@@ -15,9 +15,10 @@ Allegate il file con la figura nell'apposito spazio.'''
 
 from utils.graphGenerator import graphGenerator
 import random
+import matplotlib.pyplot as plp
 
-n = 3
-p = 1 #(n archi*100/n^2)
+n = 1476
+p = 0.15 #(n archi*100/n^2)
 m = 1
 path = "as19991212.txt"
 
@@ -38,7 +39,7 @@ def resilience(graph):
         color[i] = "white"
     CC = []
     visited = set()
-    for i in graph.V:
+    for i in graph.adj_list.keys():
         if (color[i] == "white"):
             comp = DFSVisited(graph,i,visited,color)
             CC.append(comp)
@@ -52,6 +53,7 @@ def randomAttack(graph):
     # seleziona un nodo casuale dalla lista delle adiacenze se il grafo non vuoto
     if graph and graph.adj_list:
         random_node = random.choice(list(graph.adj_list.keys()))
+        print(random_node)
         # e ne estraggo la relativa lista dei nodi adiacenti
         L = graph.adj_list[random_node]
         # print("random node: ",random_node)
@@ -59,23 +61,30 @@ def randomAttack(graph):
 
     #rimuovo il nodo estratto casualmente da tutte le liste delle adj nel quale compare
     for nodes in L:
-        if random_node in graph.adj_list[nodes]: # TODO: ma questo controllo serve??
-            graph.adj_list[nodes].remove(random_node)
+        #if random_node in graph.adj_list[nodes]: # TODO: ma questo controllo serve??
+        graph.adj_list[nodes].remove(random_node)
 
     # infine rimuovo la chiave corrispondente al nodo estratto casualmente
     graph.adj_list.pop(random_node, None)
 
     # print("final graph: ",graph.adj_list)
-    #newresilience = resilience(graph)
-    #for i in res:
-        #print(len(i))
+    newresilience = resilience(graph)
+    return newresilience
 
 all_graphs = graphGenerator(path,n,p)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
-res = resilience(generalGraph)
-for i in res:
-    print(len(i))
 # UPAgraph = all_graphs.UPA_graph
-randomAttack(generalGraph)
-#randomAttack(ERgraph)
+
+resilience_general = []
+resilience_ER = []
+resilience_UPA = []
+
+for i in range(n-1): # TODO da gestire il caso in cui la lista ritornata è vuota
+    resilience_general.append(max(len(l) for l in randomAttack(generalGraph)))
+    #resilience_ER.append(max(len(l) for l in randomAttack(ERgraph)))
+    #resilience_UPA = randomAttack(UPAgraph)
+
+plp.plot(resilience_general)
+#plp.plot(resilience_ER)
+plp.show()
