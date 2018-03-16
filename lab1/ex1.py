@@ -1,47 +1,32 @@
-''' Questa domanda richiede di analizzare il grafo delle citazioni di 27770 articoli di fisica delle alte energie.
-Il grafo ha 352807 archi ed è contenuto nel file allegato. Ogni articolo del dataset è identificato da un numero.
-Ogni riga del file contiene un arco del grafo dove il primo numero è la coda ed il secondo la testa dell'arco.
-
-Il compito da svolgere per questa domanda è di calcolare la distribuzione del grado entrante del grafo delle citazioni.
-La distribuzione deve essere normalizzata (i valori devono sommare a 1).
-Il risultato deve essere mostrato in un grafico di dispersione (o plot) dei punti con doppia scala logaritmica (log-log plot). '''
-
-import utils.buildGraphInDegreeDistribution as bG
-from utils.inDegree import inDegree
-import numpy
+import numpy as np
 import matplotlib.pyplot as pyp
 
-def buildGraphAdjacencyMatrix(file_name):
-    f = open(file_name)
-    i = 0
-    node_list = []
-    for line in f:
-        for word in line.split():
-            if i == 0:
-                from_node_id = word
-                i = i + 1
-            else:
-                to_node_id = word
-                print(to_node_id)
-                j = 0
-                trovato = False
+f = np.loadtxt("Cit-HepTh.txt", delimiter="\t")
 
-                while (j < len(node_list) and not trovato):
-                    if(to_node_id == node_list[j].id_node):
-                        node_list[j].in_degree = node_list[j].in_degree + 1
-                        trovato = True
-                    j = j + 1
+E = set()
+V = set()
 
-                if (not trovato):
-                    x = inDegree(to_node_id,1)
-                    node_list.append(x);
+# Creo E e V
+for line in f:
+    V.add(line[0])
+    V.add(line[1])
+    E.add(tuple(line))
 
-                i = 0
-    return node_list
+#Calcolo l'in-degree di ogni nodo
+in_degree = dict()
+for node in V:
+    in_degree[node] = 0
 
+for (_, n) in E:
+    in_degree[n] += 1
 
-node_list = buildGraphAdjacencyMatrix("Cit-HepTh.txt")
-in_degree = bG.buildGraphInDegreeDistribution(node_list,27770)
-in_degree = list(map(lambda x: x/27770, in_degree))
-pyp.loglog(in_degree)
+#Calcolo la distribuzione dell'in-degree
+distribution = np.zeros(27770)
+for node in in_degree:
+    distribution[in_degree[node]] += 1
+
+#Normalizzazione
+distribution = list(map(lambda x : x/27770, distribution))
+
+pyp.loglog(distribution)
 pyp.show()
