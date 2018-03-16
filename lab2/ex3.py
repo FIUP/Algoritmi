@@ -13,21 +13,22 @@ mentre l'asse verticale alla dimensione della componente connessa piu grande rim
 Aggiungete una legenda al grafico che permetta di distinguere le tre curve e che specifici i valori di p e m utilizzati.
 Allegate il file con la figura nell'apposito spazio.'''
 
-from utils.generateUndirectedGraphER import generateUndirectedGraphER
-from utils.generateUndirectedGraphFromFile import generateUndirectedGraphFromFile
+from utils.graphGenerator import graphGenerator
 import random
 n = 1476
 p = 0.15 #(n archi*100/n^2)
 m = 1
+path = "as19991212.txt"
 
-generalGraph = generateUndirectedGraphFromFile("as19991212.txt")
-ERgraph = generateUndirectedGraphER(n,p)
-# UPAgraph =
+all_graphs = graphGenerator(path,n,p)
+ERgraph = all_graphs.ER_graph
+generalGraph = all_graphs.graph_from_file
+# UPAgraph = all_graphs.UPA_graph
 
 
 
 def mostImportantNodeAttack(graph,size_max):
-    print("Graph to attack: ",graph.adj_list)
+    # print("Graph to attack: ",graph.adj_list)
     # most important node
     m_i_node = -1
     # adj_list del most_important node
@@ -67,3 +68,4 @@ def killTheNetwork(graph):
 
 killTheNetwork(generalGraph)
 killTheNetwork(ERgraph)
+# killTheNetwork(UPAgraph)

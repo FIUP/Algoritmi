@@ -18,8 +18,6 @@ class generateUndirectedGraphFromFile:
             # aggiungo i nodi a V
             self.V.add(l[0])
             self.V.add(l[1])
-            # Aggiungo l'arco a E, tenendo conto che il grafo NON orientato
-            # itertools.combination: https://stackoverflow.com/questions/35047737/unordered-pairs-pair-sets-in-python-from-a-list
             if (l[0] != l[1]):
                 self.adj_list[l[0]].add(l[1])
         #print self.V
