@@ -73,10 +73,12 @@ def randomAttack(graph):
     return max(len(l) for l in newresilience)
 
 
-all_graphs = graphGenerator(path,n,p)
+all_graphs = graphGenerator(path,n,p,m)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
-# UPAgraph = all_graphs.UPA_graph
+UPAgraph = all_graphs.UPA_graph
+
+print(UPAgraph.adj_list)
 
 resilience_general = []
 resilience_ER = []
@@ -85,11 +87,11 @@ resilience_UPA = []
 for i in range(n): # TODO da gestire il caso in cui la lista ritornata è vuota
     resilience_general.append(randomAttack(generalGraph))
     resilience_ER.append(randomAttack(ERgraph))
-    #resilience_UPA.append(randomAttack(UPAgraph))
+    resilience_UPA.append(randomAttack(UPAgraph))
 
 plp.plot(resilience_general,  label = "General Graph")
 plp.plot(resilience_ER, label = "ER Graph p = 0.15")
-#plp.plot(resilience_UPA, label = "UPA Graph m = ")
+plp.plot(resilience_UPA, label = "UPA Graph m = 1")
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
