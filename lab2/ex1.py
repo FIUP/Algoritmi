@@ -20,9 +20,10 @@ from sys import setrecursionlimit
 
 n = 1476
 p = 0.003 #(n archi*100/n^2)
-m = 1
+m = 2
 path = "as19991212.txt"
 setrecursionlimit(10000)
+
 
 def DFSVisited(graph,u,visited,color):
     color[u] = "gray"
@@ -34,7 +35,7 @@ def DFSVisited(graph,u,visited,color):
     return visited
 
 
-def resilience(graph):
+def maxCC(graph):
     color = dict()
     for i in graph.adj_list.keys():
         color[i] = "white"
@@ -46,31 +47,21 @@ def resilience(graph):
     return CC
 
 
-def randomAttack(graph):
+def calcResilience(graph, attack_order):
     # print("Graph to attack: ",graph.adj_list)
-    random_node = -1
-    L = []
-    # seleziona un nodo casuale dalla lista delle adiacenze se il grafo non vuoto
-    if graph and graph.adj_list:
-        random_node = random.choice(list(graph.adj_list.keys()))
-        #print(random_node)
-        # e ne estraggo la relativa lista dei nodi adiacenti
-        L = graph.adj_list[random_node]
-        #print("random node: ",random_node)
-        #print("list: ",L)
+    start_max_cc = maxCC(graph) #calcolo resilienza iniziale
+    resilience = [start_max_cc]
 
-    #rimuovo il nodo estratto casualmente da tutte le liste delle adj nel quale compare
-    for nodes in L:
-        graph.adj_list[nodes].remove(random_node)
+    for node in attack_order: #per ogni nodo da rimuovere
+        for nodes in graph.adj_list[node]: #elimino tutti gli archi del nodo
+            if node in graph.adj_list[nodes]:
+                graph.adj_list[nodes].remove(node)
+        graph.adj_list.pop(node) #elimino il nodo
+        max_cc = maxCC(graph) #calcolo la nuova resilienza max
+        resilience.append(max_cc) #e la aggiungo alla lista di resilienze
 
-    # infine rimuovo la chiave corrispondente al nodo estratto casualmente
-    graph.adj_list.pop(random_node, None)
+    return resilience
 
-    #calcolo la dimensione della massima componente connessa
-    newresilience = resilience(graph)
-    if not newresilience:
-        return 0
-    return max(len(l) for l in newresilience)
 
 
 all_graphs = graphGenerator(path,n,p,m)
@@ -84,17 +75,33 @@ resilience_general = []
 resilience_ER = []
 resilience_UPA = []
 
-for i in range(n): # TODO da gestire il caso in cui la lista ritornata è vuota
-    resilience_general.append(randomAttack(generalGraph))
-    resilience_ER.append(randomAttack(ERgraph))
-    resilience_UPA.append(randomAttack(UPAgraph))
+#genero ordine casuale di nodi di un grafico
+def random_order(ugraph):
+    nodes = list(ugraph.adj_list.keys())
+    random.seed(1)      # imposto il seed per garantire lo stesso risultato
+    random.shuffle(nodes)
+    return nodes
 
-plp.plot(resilience_general,  label = "General Graph")
-plp.plot(resilience_ER, label = "ER Graph p = 0.15")
-plp.plot(resilience_UPA, label = "UPA Graph m = 1")
+
+#creo un ordine d'attacco
+attack_order= random_order(ERgraph)
+x_value = range(len(attack_order) + 1)
+
+resilience_general = calcResilience(generalGraph,attack_order)
+resilience_ER= calcResilience(ERgraph,attack_order)
+resilience_UPA= calcResilience(UPAgraph,attack_order)
+
+print("RESILIENZA _____________________________",  resilience_general)
+
+'''
+plp.grid()
+plp.plot(x_value, resilience_general,  label = "General Graph")
+plp.plot(x_value,resilience_ER, label = "ER Graph p = 0.15")
+plp.plot(x_value,resilience_UPA, label = "UPA Graph m = 1")
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
 plp.legend()
 #plp.plot(resilience_ER)
 plp.show()
+'''
