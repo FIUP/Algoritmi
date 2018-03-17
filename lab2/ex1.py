@@ -93,6 +93,7 @@ resilience_UPA= calcResilience(UPAgraph,attack_order)
 
 print("RESILIENZA _____________________________",  resilience_general)
 
+
 '''
 plp.grid()
 plp.plot(x_value, resilience_general,  label = "General Graph")
