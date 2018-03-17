@@ -19,14 +19,14 @@ import matplotlib.pyplot as plp
 from sys import setrecursionlimit
 
 n = 1476
-p = 0.00001 #(n archi*100/n^2)
+p = 0.003 #(n archi*100/n^2)
 m = 1
 path = "as19991212.txt"
 setrecursionlimit(10000)
 
 def DFSVisited(graph,u,visited,color):
     color[u] = "gray"
-    visited.add(u)
+    visited.append(u)
     for v in graph.adj_list[u]:
         if (color[v] == "white"):
             visited = DFSVisited(graph,v,visited,color)
@@ -39,10 +39,9 @@ def resilience(graph):
     for i in graph.adj_list.keys():
         color[i] = "white"
     CC = []
-    visited = set()
     for i in graph.adj_list.keys():
         if (color[i] == "white"):
-            comp = DFSVisited(graph,i,visited,color)
+            comp = DFSVisited(graph,i,[],color)
             CC.append(comp)
     return CC
 
@@ -57,8 +56,8 @@ def randomAttack(graph):
         #print(random_node)
         # e ne estraggo la relativa lista dei nodi adiacenti
         L = graph.adj_list[random_node]
-        # print("random node: ",random_node)
-        # print("list: ",L)
+        #print("random node: ",random_node)
+        #print("list: ",L)
 
     #rimuovo il nodo estratto casualmente da tutte le liste delle adj nel quale compare
     for nodes in L:
@@ -84,11 +83,11 @@ resilience_ER = []
 resilience_UPA = []
 
 for i in range(n): # TODO da gestire il caso in cui la lista ritornata è vuota
-    #resilience_general.append(randomAttack(generalGraph))
+    resilience_general.append(randomAttack(generalGraph))
     resilience_ER.append(randomAttack(ERgraph))
     #resilience_UPA.append(randomAttack(UPAgraph))
 
-#plp.plot(resilience_general,  label = "General Graph")
+plp.plot(resilience_general,  label = "General Graph")
 plp.plot(resilience_ER, label = "ER Graph p = 0.15")
 #plp.plot(resilience_UPA, label = "UPA Graph m = ")
 plp.xlabel('The number of nodes removed')
