@@ -90,8 +90,8 @@ for i in range(n): # TODO da gestire il caso in cui la lista ritornata è vuota
     resilience_UPA.append(randomAttack(UPAgraph))
 
 plp.plot(resilience_general,  label = "General Graph")
-plp.plot(resilience_ER, label = "ER Graph p = 0.15")
-plp.plot(resilience_UPA, label = "UPA Graph m = 1")
+plp.plot(resilience_ER, label = "ER Graph p = " + str(p))
+plp.plot(resilience_UPA, label = "UPA Graph m = " + str(m))
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
