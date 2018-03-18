@@ -11,15 +11,16 @@ class generateUndirectedGraphER:
             self.n = n
             self.p = p
             self.adj_list = defaultdict(set)
+
             for i in range(n):
                 self.adj_list[i] = set()
 
-            for first in self.adj_list.keys():
-                for second in self.adj_list.keys():
+            for i in range(n):
+                for j in range(i,n):
 
-                    if random.random() < p and first != second:
-                        self.adj_list[first].add(second)
-                        self.adj_list[second].add(first)
+                    if random.random() < p and i != j:
+                        self.adj_list[i].add(j)
+                        self.adj_list[j].add(i)
 
         else:
             print ("Error: p must be in [0,1]")

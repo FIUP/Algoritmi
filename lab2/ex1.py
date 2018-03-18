@@ -19,8 +19,8 @@ import matplotlib.pyplot as plp
 from sys import setrecursionlimit
 
 n = 1476
-p = 0.003 #(n archi*100/n^2)
-m = 2
+p = 0.003#(n archi*100/n^2)
+m = 3
 path = "as19991212.txt"
 setrecursionlimit(10000)
 
@@ -66,28 +66,27 @@ def calcResilience(graph):
 all_graphs = graphGenerator(path,n,p,m)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
-#UPAgraph = all_graphs.UPA_graph
+UPAgraph = all_graphs.UPA_graph
 
 
 #creo un ordine d'attacco
 resilience_general = [maxCC(generalGraph)]
 resilience_ER = [maxCC(ERgraph)]
-#resilience_UPA = []
+resilience_UPA = []
 
 for i in range(n):
     resilience_general.append(calcResilience(generalGraph))
     resilience_ER.append(calcResilience(ERgraph))
-    #resilience_UPA= calcResilience(UPAgraph,attack_order)
+    resilience_UPA.append(calcResilience(UPAgraph))
 
-print("RESILIENZA _____________________________",  resilience_general)
+#print("RESILIENZA _____________________________",  resilience_ER)
 
 plp.grid()
 plp.plot(resilience_general,  label = "General Graph")
 plp.plot(resilience_ER, label = "ER Graph p = 0.003")
-#plp.plot(x_value, resilience_UPA, label = "UPA Graph m = 1")
+plp.plot(resilience_UPA, label = "UPA Graph m = 2")
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
 plp.legend()
-#plp.plot(resilience_ER)
 plp.show()
