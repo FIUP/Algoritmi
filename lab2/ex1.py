@@ -44,65 +44,50 @@ def maxCC(graph):
         if (color[i] == "white"):
             comp = DFSVisited(graph,i,[],color)
             CC.append(comp)
-    return CC
+    if not CC:
+        return 0
+    return max(len(l) for l in CC)
 
 
-def calcResilience(graph, attack_order):
+def calcResilience(graph):
     # print("Graph to attack: ",graph.adj_list)
-    start_max_cc = maxCC(graph) #calcolo resilienza iniziale
-    resilience = [start_max_cc]
 
-    for node in attack_order: #per ogni nodo da rimuovere
-        for nodes in graph.adj_list[node]: #elimino tutti gli archi del nodo
-            if node in graph.adj_list[nodes]:
-                graph.adj_list[nodes].remove(node)
-        graph.adj_list.pop(node) #elimino il nodo
-        max_cc = maxCC(graph) #calcolo la nuova resilienza max
-        resilience.append(max_cc) #e la aggiungo alla lista di resilienze
+    random_node = random.choice(list(graph.adj_list.keys()))
 
-    return resilience
+    for nodes in graph.adj_list[random_node]: #elimino tutti gli archi del nodo
+        if random_node in graph.adj_list[nodes]:
+            graph.adj_list[nodes].remove(random_node)
+    graph.adj_list.pop(random_node) #elimino il nodo
+
+    return maxCC(graph) #calcolo la nuova resilienza max
 
 
 
 all_graphs = graphGenerator(path,n,p,m)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
-UPAgraph = all_graphs.UPA_graph
-
-print(UPAgraph.adj_list)
-
-resilience_general = []
-resilience_ER = []
-resilience_UPA = []
-
-#genero ordine casuale di nodi di un grafico
-def random_order(ugraph):
-    nodes = list(ugraph.adj_list.keys())
-    random.seed(1)      # imposto il seed per garantire lo stesso risultato
-    random.shuffle(nodes)
-    return nodes
+#UPAgraph = all_graphs.UPA_graph
 
 
 #creo un ordine d'attacco
-attack_order= random_order(ERgraph)
-x_value = range(len(attack_order) + 1)
+resilience_general = [maxCC(generalGraph)]
+resilience_ER = [maxCC(ERgraph)]
+#resilience_UPA = []
 
-resilience_general = calcResilience(generalGraph,attack_order)
-resilience_ER= calcResilience(ERgraph,attack_order)
-resilience_UPA= calcResilience(UPAgraph,attack_order)
+for i in range(n):
+    resilience_general.append(calcResilience(generalGraph))
+    resilience_ER.append(calcResilience(ERgraph))
+    #resilience_UPA= calcResilience(UPAgraph,attack_order)
 
 print("RESILIENZA _____________________________",  resilience_general)
 
-
-'''
 plp.grid()
-plp.plot(x_value, resilience_general,  label = "General Graph")
-plp.plot(x_value,resilience_ER, label = "ER Graph p = 0.15")
-plp.plot(x_value,resilience_UPA, label = "UPA Graph m = 1")
+plp.plot(resilience_general,  label = "General Graph")
+plp.plot(resilience_ER, label = "ER Graph p = 0.003")
+#plp.plot(x_value, resilience_UPA, label = "UPA Graph m = 1")
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
 plp.legend()
 #plp.plot(resilience_ER)
 plp.show()
-'''

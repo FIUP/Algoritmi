@@ -10,18 +10,17 @@ class generateUndirectedGraphER:
         if p >= 0 and p <= 1:
             self.n = n
             self.p = p
-            self.V = set(range(n))
             self.adj_list = defaultdict(set)
+            for i in range(n):
+                self.adj_list[i] = set()
 
-            # Sia V = {0,1,2}. Questo ciclo itera solo sulle coppie (0,1), (0,2) e (1,2)
-            # e non sulle stesse coppie invertite (1,0), (2,0), (2,1), dimezzando cosi le iterazioni
-            for pairs in itertools.combinations(self.V,2):
-                # print("Coppie: ",pairs)
-                if random.random() < p and pairs[0] != pairs[1]:
-                    self.adj_list[pairs[0]].add(pairs[1])
-                    self.adj_list[pairs[1]].add(pairs[0])
-            # print self.V
-            # print self.E
+            for first in self.adj_list.keys():
+                for second in self.adj_list.keys():
+
+                    if random.random() < p and first != second:
+                        self.adj_list[first].add(second)
+                        self.adj_list[second].add(first)
+
         else:
             print ("Error: p must be in [0,1]")
 
