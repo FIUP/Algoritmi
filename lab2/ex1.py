@@ -59,8 +59,8 @@ for i in range(n):
 
 plp.grid()
 plp.plot(resilience_general,  label = "General Graph")
-plp.plot(resilience_ER, label = "ER Graph p = 0.003")
-plp.plot(resilience_UPA, label = "UPA Graph m = 3")
+plp.plot(resilience_ER, label = "ER Graph p = " + str(p))
+plp.plot(resilience_UPA, label = "UPA Graph m = " + str(m))
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
