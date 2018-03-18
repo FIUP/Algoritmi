@@ -48,9 +48,8 @@ def maxCC(graph):
         return 0
     return max(len(l) for l in CC)
 
-
+#elimina dalla lista delle adiacenze il nodo selezionato e i rispettivi archi
 def calcResilience(graph):
-    # print("Graph to attack: ",graph.adj_list)
 
     random_node = random.choice(list(graph.adj_list.keys()))
 
@@ -62,18 +61,18 @@ def calcResilience(graph):
     return maxCC(graph) #calcolo la nuova resilienza max
 
 
-
+#creo i 3 grafi
 all_graphs = graphGenerator(path,n,p,m)
 ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
 UPAgraph = all_graphs.UPA_graph
 
 
-#creo un ordine d'attacco
 resilience_general = [maxCC(generalGraph)]
 resilience_ER = [maxCC(ERgraph)]
 resilience_UPA = []
 
+#elimino gli n nodi
 for i in range(n):
     resilience_general.append(calcResilience(generalGraph))
     resilience_ER.append(calcResilience(ERgraph))
@@ -84,7 +83,7 @@ for i in range(n):
 plp.grid()
 plp.plot(resilience_general,  label = "General Graph")
 plp.plot(resilience_ER, label = "ER Graph p = 0.003")
-plp.plot(resilience_UPA, label = "UPA Graph m = 2")
+plp.plot(resilience_UPA, label = "UPA Graph m = 3")
 plp.xlabel('The number of nodes removed')
 plp.ylabel('Size of largest connected component after node removal')
 plp.title('The resilience of General, ER and UPA Graphs')
