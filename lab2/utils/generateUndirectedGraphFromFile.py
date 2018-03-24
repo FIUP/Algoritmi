@@ -11,7 +11,6 @@ class generateUndirectedGraphFromFile:
         f = np.loadtxt(self.path, delimiter="\t")
         for line in f:
             l = [int(n) for n in line]
-            # print l
 
             if (l[0] != l[1]):
                 self.adj_list[l[0]].add(l[1])

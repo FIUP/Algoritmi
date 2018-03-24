@@ -33,6 +33,7 @@ class generateUPAGraph:
     def __init__(self,n,m):
         self.adj_list = generateUndirectedGraphER(m,1).adj_list #creo un uER completo
         v = UPATrial(m)
+        w = 0
         for node in range(m,n):
                 adjs = v.runTrial(m)
                 self.adj_list[node] = adjs

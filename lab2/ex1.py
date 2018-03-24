@@ -21,7 +21,7 @@ from sys import setrecursionlimit
 
 n = 1476
 p = 0.003#(n archi*100/n^2)
-m = 3
+m = 2
 path = "as19991212.txt"
 setrecursionlimit(10000)
 
@@ -44,12 +44,12 @@ ERgraph = all_graphs.ER_graph
 generalGraph = all_graphs.graph_from_file
 UPAgraph = all_graphs.UPA_graph
 
-
+# calcola la resilienza iniziale deI grafI
 resilience_general = [maxCC(generalGraph)]
 resilience_ER = [maxCC(ERgraph)]
-resilience_UPA = []
+resilience_UPA = [maxCC(UPAgraph)]
 
-#elimino gli n nodi
+#Calcolo delle nuove resilienze scegliendo gli n nodi da eliminare in modo casuale
 for i in range(n):
     resilience_general.append(calcResilience(generalGraph))
     resilience_ER.append(calcResilience(ERgraph))

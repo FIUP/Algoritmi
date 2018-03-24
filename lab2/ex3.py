@@ -21,7 +21,7 @@ from sys import setrecursionlimit
 
 n = 1476
 p = 0.003 #(n archi*100/n^2)
-m = 3
+m = 2
 path = "as19991212.txt"
 setrecursionlimit(10000)
 

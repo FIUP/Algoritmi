@@ -1,16 +1,14 @@
-import itertools
 import random
-from collections import defaultdict
 
 class generateUndirectedGraphER:
     # params
-    # n: numero di nosi
+    # n: numero di nodi
     # p: probabilita che un certo nodo venga estratto
     def __init__(self,n,p):
         if p >= 0 and p <= 1:
             self.n = n
             self.p = p
-            self.adj_list = defaultdict(set)
+            self.adj_list = {}
 
             for i in range(n):
                 self.adj_list[i] = set()
