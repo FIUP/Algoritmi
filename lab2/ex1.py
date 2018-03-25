@@ -14,13 +14,13 @@ Aggiungete una legenda al grafico che permetta di distinguere le tre curve e che
 Allegate il file con la figura nell'apposito spazio.'''
 
 from utils.graphGenerator import graphGenerator
-from utils.resilienceCount import maxCC, DFSVisited
+from utils.resilienceCount import *
 import random
 import matplotlib.pyplot as plp
 from sys import setrecursionlimit
 
 n = 1476
-p = 0.003#(n archi*100/n^2)
+p = 0.003
 m = 2
 path = "as19991212.txt"
 setrecursionlimit(10000)
@@ -29,13 +29,14 @@ setrecursionlimit(10000)
 def calcResilience(graph):
 
     random_node = random.choice(list(graph.adj_list.keys()))
-
-    for nodes in graph.adj_list[random_node]: #elimino tutti gli archi del nodo
+    #elimino tutti gli archi del nodo
+    for nodes in graph.adj_list[random_node]:
         if random_node in graph.adj_list[nodes]:
             graph.adj_list[nodes].remove(random_node)
-    graph.adj_list.pop(random_node) #elimino il nodo
-
-    return maxCC(graph) #calcolo la nuova resilienza max
+    #elimino il nodo
+    graph.adj_list.pop(random_node)
+    #calcolo la nuova resilienza max
+    return maxCC(graph)
 
 
 #creo i 3 grafi
@@ -55,7 +56,6 @@ for i in range(n):
     resilience_ER.append(calcResilience(ERgraph))
     resilience_UPA.append(calcResilience(UPAgraph))
 
-#print("RESILIENZA _____________________________",  resilience_ER)
 
 plp.grid()
 plp.plot(resilience_general,  label = "General Graph")
