@@ -45,22 +45,23 @@ def CCRP(weightedGraph, S, D):
     #   if condiction():
     #       break
     while True:
-        path = []
+        path = [33242031,65292114,65312672]
         plan.extend(path)
         flow = math.inf
         t = 0
         #trovo la minima capacità degli archi nel path e calcolo il suo tempo
-        for i in range(len(path)):
-            c = weightedGraph[i][i+1][1]
-            t += weightedGraph[i][i+1][0]
+        for i in range(len(path)-1):
+            c = weightedGraph[path[i]][path[i+1]][1]
+            print(c)
+            t += weightedGraph[path[i]][path[i+1]][0]
             if (c < flow):
                 flow = c
         #diminuisco le capacità degli archi
-        for i in range(len(path)):
-            weightedGraph[i][i+1][1] -= flow
+        for i in range(len(path)-1):
+            weightedGraph[path[i]][path[i+1]][1] -= flow
             #se la capacità diventa 0 elimino l'arco dal grafo
-            if weightedGraph[i][i+1][1] == 0:
-                del weightedGraph[i][i+1]
+            if weightedGraph[path[i]][path[i+1]][1] == 0:
+                del weightedGraph[path[i]][path[i+1]]
         #aggiungo la nuova capacità
         if capacity:
             flow += capacity[-1]
@@ -76,8 +77,8 @@ def CCRP(weightedGraph, S, D):
     return (time,capacity)
 path = "SFroad.txt"
 
-S = ["3718987342", "915248218", "65286004"]
-D = ["261510687", "3522821903", "65319958", "65325408", "65295403", "258913493"]
+S = [3718987342, 915248218, 65286004]
+D = [261510687, 3522821903, 65319958, 65325408, 65295403, 258913493]
 weightedGraph = weightedGraphFromFile(path)
 (time,capacity) = CCRP(weightedGraph.weighted_adj_list, S, D)
 
