@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 from collections import defaultdict
 
 # il grafo viene rappresentato come una adj_list che, al posto del nodo destinazione,
@@ -6,7 +6,7 @@ from collections import defaultdict
             # {
             #   nodo_source1: {
             #                    nodo_dest1: [lenght1,road_type1],
-            #                    nodo_dest2: [lenght2,road_type2] 
+            #                    nodo_dest2: [lenght2,road_type2]
             #                 }
             #   nodo_source2: {
             #                   nodo_dest1: [lenght1,road_type1]
@@ -45,13 +45,13 @@ class weightedGraphFromFile:
                     self.weighted_adj_list[source_node][dest_node].append(road_time) # si potrebbe usare una tupla (immutable)?
                     self.weighted_adj_list[source_node][dest_node].append(road_capacity)
             i = i + 1
-        print(self.weighted_adj_list)
+        #print(self.weighted_adj_list)
 
     # OCCHIO ALLE ECCEZIONI SU QUESTI 3 METODI
 
     def getAdjNodes(self,source_node):
-        return (self.weighted_adj_list[source_node]).keys() 
-    
+        return (self.weighted_adj_list[source_node]).keys()
+
     def getRoadTime(self,source_node,dest_node):
         return (self.weighted_adj_list[source_node][dest_node])[0]
 
@@ -60,10 +60,7 @@ class weightedGraphFromFile:
 
 
 
-g = weightedGraphFromFile("SFroad.txt")
-print(g.getAdjNodes(54763573))
-print(g.getRoadTime(54763573,5435466139))
-print(g.getRoadCapacity(54763573,65293797))
-            
-        
-        
+#g = weightedGraphFromFile("SFroad.txt")
+#print(g.getAdjNodes(54763573))
+#print(g.getRoadTime(54763573,5435466139))
+#print(g.getRoadCapacity(54763573,65293797))
