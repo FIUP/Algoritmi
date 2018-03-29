@@ -33,30 +33,43 @@ def initSSSP(d,pi,s, V):
         pi[node] = None
     d[s] = 0
 
-def Relax(road_time, d, pi, u, v):
+def relax(road_time, d, pi, u, v):
     d[v] = d[u] + road_time
     pi[v] = u
 
-def Dijkstra(graph, s):
-    l1 = graph.weigthed_adj_list.keys()
 
-    V = set(l1)
-
+def dijkstra(graph, s):
+    l1 = list(graph.weighted_adj_list.keys())
+    l2 = []
+    for el in l1:
+        l2 = l2 + list(graph.weighted_adj_list[el].keys()) 
+    V = set(l1 +  l2)
+    print("Insieme di nodi",V)
     d = dict()
     pi = dict()
-
     initSSSP(d,pi,s, V)
-    Q = list(V)
-    heap = list()
-    for node in V:
-        heapq.heappush(heap,graph.getRoadTime(s,node) (V)) #boh
-    while Q:
-        u = heapq.heappop(Q) #min
-        for node in graph.weigthed_adj_list[u].keys():
-            if d[u] + RT < d[node]:
-                Relax (RT,d,pi,u,v)
-                Decrease
+    Q = []
 
+    for node in V:
+        heapq.heappush(Q, (d[node],node))
+
+    print("heap",Q)
+    while Q:
+        node = heapq.heappop(Q)
+        u = node[1] 
+        print("min ", u)
+        
+        for v in graph.weighted_adj_list[u].keys():
+            print("adj",v)
+            road_time_u_v = graph.getRoadTime(u,v)
+            if d[u] + road_time_u_v < d[v]:
+                relax(road_time_u_v,d,pi,u,v)
+                d[v] = d[u] + road_time_u_v
+                heapq.heappush(Q,(d[v],v))
+                print("heap",Q)
+    return d
+                
+'''
 def CCRP(weightedGraph, S, D):
     capacity = []
     time = []
@@ -104,19 +117,21 @@ def CCRP(weightedGraph, S, D):
             break
 
     return (time,capacity)
+'''
 path = "SFroad.txt"
 
 S = [3718987342, 915248218, 65286004]
 D = [261510687, 3522821903, 65319958, 65325408, 65295403, 258913493]
 weightedGraph = weightedGraphFromFile(path)
-(time,capacity) = CCRP(weightedGraph.weighted_adj_list, S, D)
+print("Graph ",weightedGraph.weighted_adj_list)
+print ("RESULT ",dijkstra(weightedGraph,1))
 
 
 
 
 #creo grafico
-plp.plot(time,capacity)
+'''plp.plot(time,capacity)
 plp.xlabel("Capacity of plan")
 plp.ylabel("Time of the longest path in the plan")
 plp.title("San Francisco's plan of emergency")
-plp.show()
+plp.show()'''
