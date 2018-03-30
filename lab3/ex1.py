@@ -74,7 +74,7 @@ def CCRP(weightedGraph, S, D):
     #   if condiction():
     #       break
     while True:
-        path = [33242031,65292114,65312672]
+        path = Dijkstra(weightedGraph, supernode)
         plan.extend(path)
         flow = math.inf
         t = 0
