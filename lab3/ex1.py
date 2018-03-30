@@ -58,16 +58,16 @@ def dijkstra(graph, s):
 
     # rendo Q la coda di min-priorità
     for node in V:
-        heapq.heappush(Q, (d[node],node)) 
+        heapq.heappush(Q, (d[node],node))
 
     # print("heap",Q)
     while Q:
         # estraggo il minimo
         node = heapq.heappop(Q)
         # node e' una tupla => node[0] = distanza dalla sorgente al nodo(chiave dello heap); node[1] = nodo vero e proprio
-        u = node[1] 
+        u = node[1]
         # print("min ", u)
-        
+
         for v in graph.weighted_adj_list[u].keys(): # per ogni nodo adiacente al minimo estratto...
             # print("adj",v)
             # Road Time from u to v => rt_u_v
@@ -76,18 +76,20 @@ def dijkstra(graph, s):
                 relax(rt_u_v, d, pi, u, v) # se possibile rilasso l'arco u -> v
                 decreaseKey(Q,d,u,v,rt_u_v) # e aggiorno lo heap col nuovo valore rilassato
                 # print("heap",Q)
-    return d
-                
-'''
+        #print("Q", Q)
+    return (d,pi)
+
+
 def CCRP(weightedGraph, S, D):
     capacity = []
     time = []
     max_time = 0
     #aggiungo il super nodo sorgente per ricondurci ad un caso con una sorgente unica
     supernode = 0
+    weightedGraph.weighted_adj_list[supernode] = defaultdict(list)
     for source in S:
-        weightedGraph[supernode] = {source : [0, math.inf]}
-
+        weightedGraph.weighted_adj_list[supernode][source].extend([0, math.inf])
+    #print("GRAPH, ", weightedGraph.weighted_adj_list)
     plan = []
     #non esiste do While in python
     #lo simulo con
@@ -96,23 +98,37 @@ def CCRP(weightedGraph, S, D):
     #   if condiction():
     #       break
     while True:
-        path = Dijkstra(weightedGraph, supernode)
+        (d,pi) = dijkstra(weightedGraph, supernode)
+        #nodo destinazione con percorso a costo minore
+        dest = {k: v for k, v in d.items() if k in D}
+        print("DEST ",dest)
+        best_destination = min(dest, key = dest.get)
+        print("BEST DEST", best_destination)
+        #genero path
+        path = []
+        if d[best_destination] != math.inf:
+            path = [best_destination]
+            father = pi[best_destination]
+            while father:
+                path = [father] + path
+                father = pi[father]
+        print("PATH ", path)
         plan.extend(path)
         flow = math.inf
         t = 0
         #trovo la minima capacità degli archi nel path e calcolo il suo tempo
         for i in range(len(path)-1):
-            c = weightedGraph[path[i]][path[i+1]][1]
-            print(c)
-            t += weightedGraph[path[i]][path[i+1]][0]
+            c = weightedGraph.getRoadCapacity(path[i],path[i+1])
+            #print(c)
+            t += weightedGraph.getRoadTime(path[i],path[i+1])
             if (c < flow):
                 flow = c
         #diminuisco le capacità degli archi
         for i in range(len(path)-1):
-            weightedGraph[path[i]][path[i+1]][1] -= flow
+            weightedGraph.weighted_adj_list[path[i]][path[i+1]][1] -= flow
             #se la capacità diventa 0 elimino l'arco dal grafo
-            if weightedGraph[path[i]][path[i+1]][1] == 0:
-                del weightedGraph[path[i]][path[i+1]]
+            if weightedGraph.getRoadCapacity(path[i], path[i+1]) == 0:
+                del weightedGraph.weighted_adj_list[path[i]][path[i+1]]
         #aggiungo la nuova capacità
         if capacity:
             flow += capacity[-1]
@@ -124,25 +140,24 @@ def CCRP(weightedGraph, S, D):
         #condizione del ciclo
         if not path:
             break
-
     return (time,capacity)
-'''
+
 
 path = "SFroad.txt"
 
 S = [3718987342, 915248218, 65286004]
 D = [261510687, 3522821903, 65319958, 65325408, 65295403, 258913493]
 weightedGraph = weightedGraphFromFile(path)
+
 #print("Graph ",weightedGraph.weighted_adj_list)
 #dijkstra(weightedGraph,1)
-print ("RESULT ",dijkstra(weightedGraph,1))
-
-
+#print ("RESULT ",dijkstra(weightedGraph,1))
+(time,capacity) = CCRP(weightedGraph, S, D)
 
 
 #creo grafico
-'''plp.plot(time,capacity)
+plp.plot(time,capacity)
 plp.xlabel("Capacity of plan")
 plp.ylabel("Time of the longest path in the plan")
 plp.title("San Francisco's plan of emergency")
-plp.show()'''
+plp.show()
