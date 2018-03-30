@@ -15,7 +15,6 @@ from collections import defaultdict
 
 class weightedGraphFromFile:
     def __init__(self,path):
-
         # la key indica il tipo della strada, il primo elemeno della lista la vel. massima e il secondo la capacita
         label_road = {
             1: [30.0,500], # strada di tipo 1 -> velocita max = 30 km/h e capacita = 500 veicoli/ora
@@ -29,22 +28,31 @@ class weightedGraphFromFile:
         self.weighted_adj_list = defaultdict(dict)
         f = np.loadtxt(path, delimiter="\t")
         i = 0
-        for line in f:
-            if(i % 2 == 0): # togliere questo if quando il file .txt sara' corretto
-                source_node = int(line[0])
-                dest_node = int(line[1])
-                road_length = line[2] # ma in metri o km?
-                road_type = int(line[3])
-                road_speed_max = label_road[road_type][0]
-                road_capacity = label_road[road_type][1]
-                road_time = road_length / road_speed_max
+        w = 0
+        y = 0
 
-                if(source_node != dest_node): # no cappi
-                    if(source_node not in self.weighted_adj_list): # se il source_node non e' stato gia' aggiunto
-                        self.weighted_adj_list[source_node] = defaultdict(list)
-                    self.weighted_adj_list[source_node][dest_node].append(road_time) # si potrebbe usare una tupla (immutable)?
-                    self.weighted_adj_list[source_node][dest_node].append(road_capacity)
+
+
+        for line in f:
+            source_node = int(line[0])
+            dest_node = int(line[1])
+            road_length = line[2] # ma in metri o km?
+            road_type = int(line[3])
+            road_speed_max = label_road[road_type][0]
+            road_capacity = label_road[road_type][1]
+            road_time = road_length / road_speed_max
+
+            if(source_node != dest_node): # no cappi
+                if(source_node not in self.weighted_adj_list): # se il source_node non e' stato gia' aggiunto
+                    self.weighted_adj_list[source_node] = defaultdict(list)
+                    y = y + 1
+                self.weighted_adj_list[source_node][dest_node].extend([road_time, road_capacity]) # si potrebbe usare una tupla (immutable)?
+                if(dest_node == 261510687):
+                    print("SDFHSEUF")
+                w = w +1
+
             i = i + 1
+        print ("W",w,"Y",y)
         #print(self.weighted_adj_list)
 
     # OCCHIO ALLE ECCEZIONI SU QUESTI 3 METODI

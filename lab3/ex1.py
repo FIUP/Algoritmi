@@ -38,7 +38,6 @@ def relax(road_time, d, pi, u, v):
     pi[v] = u
 
 def decreaseKey(Q,d,u,v,rt_u_v):
-    d[v] = d[u] + rt_u_v
     heapq.heappush(Q,(d[v],v))
 
 def dijkstra(graph, s):
@@ -66,13 +65,13 @@ def dijkstra(graph, s):
         node = heapq.heappop(Q)
         # node e' una tupla => node[0] = distanza dalla sorgente al nodo(chiave dello heap); node[1] = nodo vero e proprio
         u = node[1]
-        # print("min ", u)
+        print("min ", u)
 
         for v in graph.weighted_adj_list[u].keys(): # per ogni nodo adiacente al minimo estratto...
             # print("adj",v)
             # Road Time from u to v => rt_u_v
             rt_u_v = graph.getRoadTime(u,v) # ricavo il tempo di percorrenza tra il minimo estratto e ogni suo vicino
-            if d[u] + rt_u_v < d[v]:
+            if (d[u] + rt_u_v) < d[v]:
                 relax(rt_u_v, d, pi, u, v) # se possibile rilasso l'arco u -> v
                 decreaseKey(Q,d,u,v,rt_u_v) # e aggiorno lo heap col nuovo valore rilassato
                 # print("heap",Q)
