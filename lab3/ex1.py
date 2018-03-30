@@ -33,30 +33,52 @@ def initSSSP(d,pi,s, V):
         pi[node] = None
     d[s] = 0
 
-def Relax(road_time, d, pi, u, v):
+def relax(road_time, d, pi, u, v):
     d[v] = d[u] + road_time
     pi[v] = u
 
-def Dijkstra(graph, s):
-    l1 = graph.weigthed_adj_list.keys()
+def decreaseKey(Q,d,u,v,rt_u_v):
+    d[v] = d[u] + rt_u_v
+    heapq.heappush(Q,(d[v],v))
 
-    V = set(l1)
+def dijkstra(graph, s):
+    # creo l'insieme di nodi
+    # insieme dei nodi che hanno out-degree > 0
+    V = set(graph.weighted_adj_list.keys())
+    i = 0
+    for el in V:
+        V = V.union(set(graph.weighted_adj_list[el].keys())) # insieme dei nodi adiacenti ad ogni nodo con out-degree > 0. Così prendo anche i nodi con grado entrante = 0
+    # a questo punto V è l'insieme dei nodi
+    #print("Insieme di nodi",V)
 
     d = dict()
     pi = dict()
+    initSSSP(d,pi,s,V)
+    Q = [] # heap per la priorità
 
-    initSSSP(d,pi,s, V)
-    Q = list(V)
-    heap = list()
+    # rendo Q la coda di min-priorità
     for node in V:
-        heapq.heappush(heap,graph.getRoadTime(s,node) (V)) #boh
-    while Q:
-        u = heapq.heappop(Q) #min
-        for node in graph.weigthed_adj_list[u].keys():
-            if d[u] + RT < d[node]:
-                Relax (RT,d,pi,u,v)
-                Decrease
+        heapq.heappush(Q, (d[node],node)) 
 
+    # print("heap",Q)
+    while Q:
+        # estraggo il minimo
+        node = heapq.heappop(Q)
+        # node e' una tupla => node[0] = distanza dalla sorgente al nodo(chiave dello heap); node[1] = nodo vero e proprio
+        u = node[1] 
+        # print("min ", u)
+        
+        for v in graph.weighted_adj_list[u].keys(): # per ogni nodo adiacente al minimo estratto...
+            # print("adj",v)
+            # Road Time from u to v => rt_u_v
+            rt_u_v = graph.getRoadTime(u,v) # ricavo il tempo di percorrenza tra il minimo estratto e ogni suo vicino
+            if d[u] + rt_u_v < d[v]:
+                relax(rt_u_v, d, pi, u, v) # se possibile rilasso l'arco u -> v
+                decreaseKey(Q,d,u,v,rt_u_v) # e aggiorno lo heap col nuovo valore rilassato
+                # print("heap",Q)
+    return d
+                
+'''
 def CCRP(weightedGraph, S, D):
     capacity = []
     time = []
@@ -104,19 +126,23 @@ def CCRP(weightedGraph, S, D):
             break
 
     return (time,capacity)
+'''
+
 path = "SFroad.txt"
 
 S = [3718987342, 915248218, 65286004]
 D = [261510687, 3522821903, 65319958, 65325408, 65295403, 258913493]
 weightedGraph = weightedGraphFromFile(path)
-(time,capacity) = CCRP(weightedGraph.weighted_adj_list, S, D)
+#print("Graph ",weightedGraph.weighted_adj_list)
+#dijkstra(weightedGraph,1)
+print ("RESULT ",dijkstra(weightedGraph,1))
 
 
 
 
 #creo grafico
-plp.plot(time,capacity)
+'''plp.plot(time,capacity)
 plp.xlabel("Capacity of plan")
 plp.ylabel("Time of the longest path in the plan")
 plp.title("San Francisco's plan of emergency")
-plp.show()
+plp.show()'''

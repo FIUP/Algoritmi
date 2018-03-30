@@ -40,7 +40,7 @@ class weightedGraphFromFile:
                 road_time = road_length / road_speed_max
 
                 if(source_node != dest_node): # no cappi
-                    if(not(source_node in self.weighted_adj_list)): # se il source_node non e' stato gia' aggiunto
+                    if(source_node not in self.weighted_adj_list): # se il source_node non e' stato gia' aggiunto
                         self.weighted_adj_list[source_node] = defaultdict(list)
                     self.weighted_adj_list[source_node][dest_node].append(road_time) # si potrebbe usare una tupla (immutable)?
                     self.weighted_adj_list[source_node][dest_node].append(road_capacity)
