@@ -28,10 +28,6 @@ class weightedGraphFromFile:
         self.weighted_adj_list = defaultdict(dict)
         f = np.loadtxt(path, delimiter="\t")
         i = 0
-        w = 0
-        y = 0
-
-
 
         for line in f:
             source_node = int(line[0])
@@ -45,15 +41,9 @@ class weightedGraphFromFile:
             if(source_node != dest_node): # no cappi
                 if(source_node not in self.weighted_adj_list): # se il source_node non e' stato gia' aggiunto
                     self.weighted_adj_list[source_node] = defaultdict(list)
-                    y = y + 1
                 self.weighted_adj_list[source_node][dest_node].extend([road_time, road_capacity]) # si potrebbe usare una tupla (immutable)?
-                if(dest_node == 261510687):
-                    print("SDFHSEUF")
-                w = w +1
 
             i = i + 1
-        print ("W",w,"Y",y)
-        #print(self.weighted_adj_list)
 
     # OCCHIO ALLE ECCEZIONI SU QUESTI 3 METODI
 
@@ -65,10 +55,3 @@ class weightedGraphFromFile:
 
     def getRoadCapacity(self,source_node,dest_node): # o road capacity?
         return (self.weighted_adj_list[source_node][dest_node])[1]
-
-
-
-#g = weightedGraphFromFile("SFroad.txt")
-#print(g.getAdjNodes(54763573))
-#print(g.getRoadTime(54763573,5435466139))
-#print(g.getRoadCapacity(54763573,65293797))
