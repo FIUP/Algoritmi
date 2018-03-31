@@ -36,11 +36,11 @@ class weightedGraphFromFile:
         for line in f:
             source_node = int(line[0])
             dest_node = int(line[1])
-            road_length = line[2] # ma in metri o km?
+            road_length = line[2] # in metri
             road_type = int(line[3])
             road_speed_max = label_road[road_type][0]
             road_capacity = label_road[road_type][1]
-            road_time = road_length / road_speed_max
+            road_time = (road_length / 1000) / road_speed_max # in ore
 
             if(source_node != dest_node): # no cappi
                 if(source_node not in self.weighted_adj_list): # se il source_node non e' stato gia' aggiunto
