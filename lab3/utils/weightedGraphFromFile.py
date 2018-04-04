@@ -55,3 +55,11 @@ class weightedGraphFromFile:
 
     def getRoadCapacity(self,source_node,dest_node): # o road capacity?
         return (self.weighted_adj_list[source_node][dest_node])[1]
+
+    def getPredNodes(self,dest):
+        p= dict()
+        for item in self.weighted_adj_list:
+            for node in self.weighted_adj_list[item].keys():
+                if node == dest:
+                    p[item] = dest
+        return p
