@@ -40,16 +40,7 @@ def relax(road_time, d, pi, u, v):
 def decreaseKey(Q,d,u,v,rt_u_v):
     heapq.heappush(Q,(d[v],v))
 
-def dijkstra(graph, s):
-    # creo l'insieme di nodi
-    # insieme dei nodi che hanno out-degree > 0
-    l1 = list(graph.weighted_adj_list.keys())
-    l2 = []
-    for el in l1:
-        l2 = l2 + list(graph.weighted_adj_list[el].keys())
-    V = set(l1 +  l2)
-    # a questo punto V è l'insieme dei nodi
-
+def dijkstra(graph, s, V):
     d = dict()
     pi = dict()
     initSSSP(d,pi,s,V)
@@ -79,16 +70,23 @@ def dijkstra(graph, s):
 def CCRP(weightedGraph, S, D):
     capacity = []
     time = []
-    max_time = 0
     #aggiungo il super nodo sorgente per ricondurci ad un caso con una sorgente unica
     supernode = 0
     weightedGraph.weighted_adj_list[supernode] = defaultdict(list)
     for source in S:
         weightedGraph.weighted_adj_list[supernode][source].extend([0, math.inf])
 
+    # creo l'insieme di nodi
+    # insieme dei nodi che hanno out-degree > 0
+    l1 = list(weightedGraph.weighted_adj_list.keys())
+    l2 = []
+    for el in l1:
+        l2 = l2 + list(weightedGraph.weighted_adj_list[el].keys())
+    V = set(l1 +  l2)
+    # a questo punto V è l'insieme dei nodi
 
     while True:
-        (d,pi) = dijkstra(weightedGraph, supernode)
+        (d,pi) = dijkstra(weightedGraph, supernode, V)
         #nodo destinazione con percorso a costo minore
         dest = {k: v for k, v in d.items() if k in D}
         best_destination = min(dest, key = dest.get)
@@ -101,6 +99,7 @@ def CCRP(weightedGraph, S, D):
                 path = [father] + path
                 father = pi[father]
 
+        #se non trovo un percorso ho concluso la creazione del piano
         if not path:
             break
 
@@ -122,10 +121,8 @@ def CCRP(weightedGraph, S, D):
         if capacity:
             flow += capacity[-1]
         capacity.append(flow)
-        #aggiungo il tempo di percorrenza maggiore
-        if (t > max_time):
-            max_time = t
-        time.append(max_time)
+        #aggiungo il tempo di percorrenza
+        time.append(t)
         #condizione del ciclo
     return (time,capacity)
 
