@@ -58,7 +58,7 @@ def dijkstra(graph, s):
     # rendo Q la coda di min-priorità
     for node in V:
         heapq.heappush(Q, (d[node],node))
-
+    paragon = len(Q)
     while Q:
         # estraggo il minimo
         node = heapq.heappop(Q)
@@ -71,6 +71,7 @@ def dijkstra(graph, s):
             if (d[u] + rt_u_v) < d[v]:
                 relax(rt_u_v, d, pi, u, v) # se possibile rilasso l'arco u -> v
                 decreaseKey(Q,d,u,v,rt_u_v) # e aggiorno lo heap col nuovo valore rilassato
+                print("aftedecrease ",len(Q),"before: ",paragon)
 
     return (d,pi)
 
@@ -128,6 +129,16 @@ def CCRP(weightedGraph, S, D):
         #condizione del ciclo
     return (time,capacity)
 
+# PRE = (time è in ore. Esemprio: time = 132.96411)
+def decimaleToSexasegimale(time): 
+    sexasegimal_time = []
+    for el in time:
+        hours = int(el)
+        minutes = int(round((el * 60) % 60,0))
+        seconds = int(round((el * 3600) % 60,0))
+        sexasegimal_time.append(str(hours) + ":" + str(minutes) + ":" + str(seconds))
+    return sexasegimal_time
+
 
 path = "SFroad.txt"
 
@@ -138,6 +149,7 @@ weightedGraph = weightedGraphFromFile(path)
 (time,capacity) = CCRP(weightedGraph, S, D)
 
 #creo grafico
+
 plp.plot(capacity,time)
 plp.xlabel("Capacity of plan")
 plp.ylabel("Time of the longest path in the plan")
