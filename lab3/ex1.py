@@ -29,6 +29,16 @@ al crescere del numero di percorsi inseriti nel piano dall'algoritmo. '''
 '''
 
 
+'''
+####################################
+    CONSIGLIO PER IL DOCENTE
+####################################
+
+Gentile professore,
+    prima di leggere il codice, le consigliamo di leggere l'esercizio 3 contenente le domande teoriche, specialmente l'ultima domanda, ovvero
+    quella che spiega l'implementazione e l'uso del min-heap.
+'''
+
 
 def initSSSP(d,pi,s, V):
     for node in V:
@@ -41,13 +51,36 @@ def relax(road_time, d, pi, u, v):
     pi[v] = u
 
 
-def decreaseKey(Q,x):
+def decreaseKey(Q,x): # decrease key che pusha sempre -> più veloce
     heapq.heappush(Q,x)
+
+def decreaseKey2(Q, node, old_w, new_val): # decrease key tradizionale. Solo una delle due è utilizzata
+        i = Q.index([old_w, node]) # trovo l'indice del nodo nell'array Q
+        if Q[i][0] < new_val:
+            return False
+
+        Q[i][0] = new_val # aggiorno la chiave
+        bubbleUp(Q,i) # e sistemo l'albero per mantenere la proprietà di min-heap
+        return True    
+
+def bubbleUp(Q, i):
+        p = parent(i)
+        while i > 0 and Q[i] < Q[p]:
+            aux = Q[i]
+            Q[i] = Q[p]
+            Q[p] = aux
+            i = p
+            p = parent(i)
+
+def parent(i):
+    return int((i - 1) / 2)
 
 
 def dijkstra(graph, s, V,maximum):
-    d = dict()
+    # creo il dizionario delle distanze e de puntatori al padre
+    d = dict() 
     pi = dict()
+    # e li inizializzo
     initSSSP(d,pi,s,V)
     Q = [] # heap per la priorità
 
@@ -56,55 +89,32 @@ def dijkstra(graph, s, V,maximum):
         heapq.heappush(Q, [d[node],node])
 
     while Q:
+        # maximum serve per misurare la complessità in spazio nel caso usassi decreaseKey, cioè quella che pusha sempre
         if len(Q) > maximum: # salvo la grandezza massima che lo heap può raggiungere
             maximum = len(Q)
+        
         # estraggo il minimo
         node = heapq.heappop(Q)
-        # node e' una tupla => node[0] = distanza dalla sorgente al nodo(chiave dello heap); node[1] = nodo vero e proprio
-        u = node[1]
+        
+        # node e' un array => node[0] = distanza dalla sorgente al nodo(chiave dello heap); node[1] = chiave (identificativo) nodo vero e proprio
+        u = node[1] 
 
         for v in graph.weighted_adj_list[u].keys(): # per ogni nodo adiacente al minimo estratto...
             # Road Time from u to v => rt_u_v
             rt_u_v = graph.getRoadTime(u,v) # ricavo il tempo di percorrenza tra il minimo estratto e ogni suo vicino
-            if d[u] + rt_u_v < d[v]:
-                old_w = d[v]
-                relax(rt_u_v, d, pi, u, v) # se possibile rilasso l'arco u -> 
-                #decreaseKey(Q,[d[v],v])
-                decrease_key2(Q,v,old_w,d[v])  # e aggiorno lo heap col nuovo valore rilassato
-            
+            if d[u] + rt_u_v < d[v]: # se ho trovato un nuovo cammino minimo...
+                old_w = d[v] # salvo il valore vecchio della chiave dello heap per decraseKey2
+                relax(rt_u_v, d, pi, u, v) # rilasso l'arco u -> v
+                ####
                 
-    #print("scanning in",T.time()-t0,"B.U",i)        
+                '''Solo uno tra questi due decreaseKey può essere decommentato'''
+               
+                decreaseKey(Q,[d[v],v]) # e aggiorno lo heap col nuovo valore rilassato (veloce ma occupa più spazio)
+                #decreaseKey2(Q,v,old_w,d[v])  # e aggiorno lo heap col nuovo valore rilassato  (non occupa più spazio del normale, ma 40 volte più lento)
+               
+                ####
+
     return (d,pi,maximum)
-
-def parent(i):
-    return int((i - 1) / 2)
-
-def bubble_up(Q, i):
-        """Takes the node with index i and puts it in the correct position to restore the heap state.
-        :param i: index of the node to bubble up
-        :return: None
-        """
-        p = parent(i)
-        while i > 0 and Q[i] < Q[p]:
-            Q[i], Q[p] = Q[p], Q[i]
-            i = p
-            p = parent(i)
-
-def decrease_key2(Q, node, old_val, new_val):
-        """Updates the distance of the node (old_val) with the new computed distance (new_val), only if the latter
-        is greater than the first.
-        :param node: identifier of the node, it's not its index
-        :param old_val: used as heap.index([old_val, node]) just to find the index of the node that needs the update
-        :param new_val: value that will be assigned to the target node - only if new_val > old_val
-        :return:
-        """
-        i = Q.index([old_val, node])
-        if Q[i][0] < new_val:
-            return False
-
-        Q[i][0] = new_val
-        bubble_up(Q,i)
-        return True
 
 def CCRP(weightedGraph, S, D):
     
@@ -130,9 +140,11 @@ def CCRP(weightedGraph, S, D):
     while True:
         t0 = T.time()
         (d,pi,maximum) = dijkstra(weightedGraph, supernode, V, maximum)
-        print("t=",T.time()-t0)
-        if(worst_heap_size < maximum): # di tutti gli heap, trovo quello peggiore
+        print("Dijkstra in =",T.time()-t0)
+
+        if(worst_heap_size < maximum): # di tutti gli heap prodotti di dijkstra, trovo quello peggiore (con più nodi)
             worst_heap_size = maximum
+
         #nodo destinazione con percorso a costo minore
         dest = {k: v for k, v in d.items() if k in D}
         best_destination = min(dest, key = dest.get)
@@ -185,16 +197,6 @@ def measureQuality(w_h_s,n_h_s):
     print("Worst heap size: ",w_h_s,". Normal heap size:",n_h_s,". => Increase of ",i_h_s,"%")
     print("Original heap depth: ",normal_depth,". Worst depth: ",worst_depth,"Difference: ",round(worst_depth - normal_depth,2))
 
-
-# PRE = (time è in ore. Esemprio: time = 132.96411)
-def decimaleToSexasegimale(time): 
-    sexasegimal_time = []
-    for el in time:
-        hours = int(el)
-        minutes = int(round((el * 60) % 60,0))
-        seconds = int(round((el * 3600) % 60,0))
-        sexasegimal_time.append(str(hours) + ":" + str(minutes) + ":" + str(seconds))
-    return sexasegimal_time
 
 path = "SFroad.txt"
 
