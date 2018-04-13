@@ -67,8 +67,8 @@ def dictGenerator2(n): # più veloce di quella originale e utilizza un po meno m
     return struct
 
 
-''' molto lenta, ma usa il 30% in meno della memoria delle altre due
-def dictGenerator2(n):
+''' molto lenta, ma usa il 30% in meno della memoria delle altre due'''
+def dictGenerator3(n):
     struct = defaultdict(list)
     d = []
     pi = []
@@ -100,15 +100,15 @@ def dictGenerator2(n):
             find = False
             for el in x:
                 if el == i:
-                    find = True
                     struct[i].extend([x])
-                if el > i and find == False:
+                    break
+                if el > i: 
                     break
 
     #print("FINAL: \n",struct)
     #print("Second part o dict generated in ", T.time() - Ts)
     print("This fun has used ",(memoryUsage(struct) + memoryUsage(combination)) / 1024, " KB")
-    return struct'''
+    return struct
 
 
 n = 24
@@ -136,4 +136,5 @@ if A == B:
     print("EQUALS")
 else:
     print("DIFFERENT")
+
 
