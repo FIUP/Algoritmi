@@ -1,9 +1,11 @@
 import itertools
 from collections import defaultdict
 import time as T
-
+from memory_profiler import memory_usage
+from sys import getsizeof as memoryUsage
 def dictGenerator(n):
-    dictionary = {}
+    mem = 0
+    dictionary = defaultdict(list)
     d = []
     pi = []
     #prendo 1 come nodo iniziale, con unica combinazione: tutti i nodi
@@ -17,78 +19,121 @@ def dictGenerator(n):
     #print(l)
     #print("--------")
     #creo tutte le combinazioni
-    Tp = T.time()
     combination = []
-    for r in range (len(l)+1):
+    for r in range (n):
         #print(list(itertools.combinations(l,r)))
         combination.extend(map(list,itertools.combinations(l,r)))
+
+    for i in range(2,n+1):
+        dictionary[i] = []
+        comb = [x for x in combination if i in x]
+        dictionary[i].extend(comb)
+    print("This fun has used ",(memoryUsage(comb) + memoryUsage(dictionary) + memoryUsage(combination))/1024, " KB")
+    return dictionary
+
+def dictGenerator2(n): # più veloce di quella originale e utilizza un po meno memoria
+    struct = defaultdict(list)
+    d = []
+    pi = []
+    struct[1] = [x+1 for x in range(n)]
+    for i in range(2,n+1):
+        struct[i].append([i])
+    #print(struct)
+    #print("----")
+    d.append(None)  #valore della soluzione
+    pi.append(None)
+    #lista da dove generare le combinazioni
+    L = [x for x in range (2,n+1)]
+    #print(l)
+    #print("--------")
+    #creo tutte le combinazioni
+    combination = []
+    for l in range (n-1):
+        #print(list(itertools.combinations(l,r)))
+        combination.extend(map(list,itertools.combinations(L,l+2)))
     #filtro le combinazioni che hanno i al loro interno
     #print("_______")
+    
     #print(combination)
     #print("_____")
     #print("First part o dict generated in ", T.time() - Tp)
     Ts = T.time()
     for i in range(2,n+1):
-        dictionary[i] = []
         comb = [x for x in combination if i in x]
-        dictionary[i].extend(comb)
-    #print("FINAL: \n",dictionary)
+        struct[i].extend(comb)
+    #print("FINAL: \n",struct)
     #print("Second part o dict generated in ", T.time() - Ts)
+    print("This fun has used ",(memoryUsage(comb) + memoryUsage(struct) + memoryUsage(combination)) / 1024, " KB")
+    return struct
 
-    return dictionary
 
+''' molto lenta, ma usa il 30% in meno della memoria delle altre due
 def dictGenerator2(n):
     struct = defaultdict(list)
-    struct[1] = [i+1 for i in range(n)]
-
     d = []
     pi = []
+    struct[1] = [x+1 for x in range(n)]
+    for i in range(2,n+1):
+        struct[i].append([i])
+    #print(struct)
+    #print("----")
     d.append(None)  #valore della soluzione
     pi.append(None)
-
+    #lista da dove generare le combinazioni
+    L = [x for x in range (2,n+1)]
+    #print(l)
+    #print("--------")
+    #creo tutte le combinazioni
+    combination = []
+    for l in range (n-1):
+        #print(list(itertools.combinations(l,r)))
+        combination.extend(map(list,itertools.combinations(L,l+2)))
+    #filtro le combinazioni che hanno i al loro interno
+    #print("_______")
+    
+    #print(combination)
+    #print("_____")
+    #print("First part o dict generated in ", T.time() - Tp)
+    Ts = T.time()
     for i in range(2,n+1):
-        struct[i].extend([[i]]) # prima combinazione di lunghezza 1
-        for j in range(1,n):
-            struct[i].extend(generateSpecialComb(struct,j,i,n))
-    #print ("FINAL: \n", struct)
-    
-  
-    
+        for x in combination:
+            find = False
+            for el in x:
+                if el == i:
+                    find = True
+                    struct[i].extend([x])
+                if el > i and find == False:
+                    break
 
-# genera le combinazioni di lunghezza l che non contengono il nodo di partenza 
-# e che contengono il nodo node
-def generateSpecialComb(struct,l,node,n):
-    L = [i+1 for i in range(n)]
-   # print("lunghezza L", len(L),"List: ",L,"£ deleting", node)
-    L.pop(node-1)
-    L.pop(0)
-    #print("Lista di appoggio per il nodo ",node," = ",L)
-    #print("COMB DI LUNGHEZZA ",l," per il nodo ", node," fino a ",n)
-    #print ("Lista di aiuto",L)
-    list_of_lists = list()
-    list_to_append = list()
-    for comb in itertools.combinations(L,l):
-        list_to_append = [node]
-        list_to_append.extend(list(comb))
-        list_of_lists.append(list_to_append)
-        #list_to_append.extend(list(comb))
-        #list_to_append.append(node)
-        #list_to_append.extend(list(comb).append(node))
-    #print("Final list: ",list_of_lists,"\n")
-    return list_of_lists
-            
+    #print("FINAL: \n",struct)
+    #print("Second part o dict generated in ", T.time() - Ts)
+    print("This fun has used ",(memoryUsage(struct) + memoryUsage(combination)) / 1024, " KB")
+    return struct'''
 
 
+n = 24
 
-n = 18
 print("n = ",n,"\n")
 
-print("dictGenerator1 computing ...\n")
+print("dictGenerator2 computing ...\n")
 t0 = T.time()
-dictGenerator(n)
-print("=> dictGenerator1 has computed in ", T.time() - t0," <=\n")
+A = dictGenerator2(n)
+second_version = T.time() - t0
+print("=> dictGenerator2 has computed in ", second_version," <=\n")
 
-#print("dictGenerator2 computing ...\n")
+print("dictGenerator computing ...\n")
 t1 = T.time()
-dictGenerator2(n)
-print("=> dictGenerator2 has computed in ", T.time() - t1," <=")
+B = dictGenerator(n)
+first_version = T.time() - t1
+print("=> dictGenerator has computed in ", first_version," <=")
+
+if first_version > second_version:
+    print("Generator2 is faster")
+else:
+    print("Generator1 is faster")
+
+if A == B:
+    print("EQUALS")
+else:
+    print("DIFFERENT")
+
