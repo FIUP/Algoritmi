@@ -63,7 +63,7 @@ def dictGenerator2(n): # più veloce di quella originale e utilizza un po meno m
         struct[i].extend(comb)
     #print("FINAL: \n",struct)
     #print("Second part o dict generated in ", T.time() - Ts)
-    print("This fun has used ",(memoryUsage(comb) + memoryUsage(struct) + memoryUsage(combination)) / 1024, " KB")
+    print("This fun has used ",(memoryUsage(comb) + memoryUsage(struct) + memoryUsage(combination)) / (1024*1024), " MB")
     return struct
 
 
@@ -111,7 +111,7 @@ def dictGenerator3(n):
     return struct
 
 
-n = 24
+n = 27
 
 print("n = ",n,"\n")
 
@@ -120,7 +120,7 @@ t0 = T.time()
 A = dictGenerator2(n)
 second_version = T.time() - t0
 print("=> dictGenerator2 has computed in ", second_version," <=\n")
-
+'''
 print("dictGenerator computing ...\n")
 t1 = T.time()
 B = dictGenerator(n)
@@ -137,4 +137,4 @@ if A == B:
 else:
     print("DIFFERENT")
 
-
+'''
