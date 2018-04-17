@@ -27,12 +27,42 @@ class graphFromFile:
         N = int(Dimension)
         for i in range(0, int(Dimension)):
             x,y = f.readline().strip().split()[1:]
-            nodelist.append([int(math.modf(float(x))[1]), int(math.modf(float(y))[1])])
+            nodelist.append([float(x), float(y)])
 
-        adj_list=[[0 for x in range(int(Dimension))] for y in range(int(Dimension))]
+        self.adj_list=[[0 for x in range(int(Dimension))] for y in range(int(Dimension))]
+
+        #nodelist.append([int(math.modf(float(x))[1]), int(math.modf(float(y))[1])])
+
 
         for x in range(int(Dimension)):
             for y in range(int(Dimension)):
-                adj_list[x][y] = nodelist[x][0]+nodelist[y][0]
+                self.x=1
+                self.adj_list[x][y] = self.CalcDistance(nodelist[x], nodelist[y], EdgeWeightType)
         print(nodelist)
-        print(adj_list)
+        print(self.adj_list)
+
+    def CalcDistance(self, source,dest,type):
+        if type == "EUC_2D":
+            dist = math.sqrt((source[0]-dest[0])**2 + (source[1]-dest[1])**2)
+            dist = round(dist);
+            return dist;
+        else:
+            if type == "GEO":
+                #converto coord in radianti
+                source_lat = self.CalcRadian(source[0])
+                source_long = self.CalcRadian(source[1])
+                dest_lat = self.CalcRadian(dest[0])
+                dest_long = self.CalcRadian(dest[1])
+                #calcolo la distanta
+                RRR = 6378.388
+                q1 = math.cos(source_long - dest_long)
+                q2 = math.cos(source_lat - dest_lat)
+                q3 = math.cos(source_lat + dest_lat)
+                dist = int(RRR * math.acos(0.5*((1.0+q1)*q2 - (1.0 - q1) * q3) ) + 1.0)
+                return dist
+
+    def CalcRadian(self, i):
+        PI = 3.141592
+        deg = int(math.modf(i))
+        min = i - deg
+        return (PI *(deg + 5*min/3.0)/180.0)
