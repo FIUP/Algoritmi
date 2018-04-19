@@ -12,7 +12,7 @@ def HKVisit(v,S,graph):
     print(graph.d)
     if S == {v}:
         return graph.CalcDistance(v,1,graph.getWeightType())
-    elif (v,S) in graph.d:
+    elif (v,S) in graph.d and graph.d[(v,S)] != None:
         return graph.d[(v,S)]
     else:
         min_dist = inf
