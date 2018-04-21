@@ -1,8 +1,5 @@
 from utils.graphFromFile import graphFromFile
 import os
-
-from utils.graphFromFile import graphFromFile
-
 from math import inf
 
 def HKTSP(graph):
