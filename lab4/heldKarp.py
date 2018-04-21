@@ -1,13 +1,21 @@
 from utils.graphFromFile import graphFromFile
 import os
 from math import inf
+import time as T
+import sys #libreria per interrompere l'esecuzione
 
 def HKTSP(graph):
 
     V = frozenset([x for x in range(1,graph.Dimension + 1)])
-    return HKVisit(1,V,graph)
+    t0 = T.time()
+    return HKVisit(1,V,graph,t0)
 
-def HKVisit(v,S,graph):
+def HKVisit(v,S,graph,t0):
+
+
+    if T.time() - t0 > 600: #dopo x secondi
+        return inf
+            #sys.exit("Esecuzione terminata")
     if S == {v}:
         return graph.adj_list[v-1][0] #graph.CalcDistance(v,1,graph.getWeightType())
     elif (v,S) in graph.d and graph.d[(v,S)] != None:
@@ -16,8 +24,8 @@ def HKVisit(v,S,graph):
         min_dist = inf
         min_prec = None
         for u in (S - {v}):
-            dist = HKVisit(u,S - {v},graph)
-            relax_val = dist + graph.adj_list[u-1][v-1] #graph.CalcDistance(u,v, graph.getWeightType())
+            dist = HKVisit(u,S - {v},graph,t0)
+            relax_val = dist + graph.adj_list[u-1][v-1]#graph.CalcDistance(u,v, graph.getWeightType())
             if relax_val < min_dist:
                 min_dist = relax_val
                 min_prec = u
@@ -28,7 +36,7 @@ def HKVisit(v,S,graph):
 
         return min_dist
 
-graph = graphFromFile("graphs/burma14.tsp")
+graph = graphFromFile("graphs/berlin52.tsp")
 res = HKTSP(graph)
 print("RESULT",res)
 
