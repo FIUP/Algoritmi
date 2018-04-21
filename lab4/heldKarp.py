@@ -8,7 +8,7 @@ import time as T
 import sys #libreria per interrompere l'esecuzione
 
 def HKTSP(graph):
-    #struct = dictGenerator2()
+
     V = frozenset([x for x in range(1,graph.Dimension + 1)])
     t0 = T.time()
     return HKVisit(1,V,graph,t0)
