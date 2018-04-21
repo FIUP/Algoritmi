@@ -6,7 +6,7 @@ from utils.graphFromFile import graphFromFile
 from math import inf
 
 def HKTSP(graph):
-    #struct = dictGenerator2()
+
     V = frozenset([x for x in range(1,graph.Dimension + 1)])
     return HKVisit(1,V,graph)
 
@@ -20,7 +20,7 @@ def HKVisit(v,S,graph):
         min_prec = None
         for u in (S - {v}):
             dist = HKVisit(u,S - {v},graph)
-            relax_val = dist + graph.adj_list[u-1][v-1]#graph.CalcDistance(u,v, graph.getWeightType())
+            relax_val = dist + graph.adj_list[u-1][v-1] #graph.CalcDistance(u,v, graph.getWeightType())
             if relax_val < min_dist:
                 min_dist = relax_val
                 min_prec = u
@@ -31,7 +31,7 @@ def HKVisit(v,S,graph):
 
         return min_dist
 
-graph = graphFromFile("graphs/berlin52.tsp")
+graph = graphFromFile("graphs/burma14.tsp")
 res = HKTSP(graph)
 print("RESULT",res)
 
