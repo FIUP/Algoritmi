@@ -68,12 +68,9 @@ class graphFromFile:
                 return dist
 
     def CalcRadian(self, i):
-        PI = 3.141592
         deg = int(i)
         min = i - deg
-        return (PI *(deg + 5*min/3.0)/180.0)
+        return (math.pi *(deg + 5*min/3.0)/180.0)
 
     def getWeightType(self):
         return self.EdgeWeightType
-
-   

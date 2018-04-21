@@ -1,5 +1,6 @@
 from utils.graphFromFile import *
 
-path= "graphs/berlin52.tsp"
+path= "graphs/burma14.tsp"
 
-graphFromFile(path)
+graph = graphFromFile(path)
+print(graph.adj_list)

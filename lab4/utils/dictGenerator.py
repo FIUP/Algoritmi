@@ -33,15 +33,15 @@ def dictGenerator(n):
 
 def dictGenerator2(n): # più veloce di quella originale e utilizza un po meno memoria
     struct = defaultdict(list)
-    d = []
-    pi = []
+    #d = []
+    #pi = []
     struct[1] = [x+1 for x in range(n)]
     for i in range(2,n+1):
         struct[i].append([i])
     #print(struct)
     #print("----")
-    d.append(None)  #valore della soluzione
-    pi.append(None)
+    #d.append(None)  #valore della soluzione
+    #pi.append(None)
     #lista da dove generare le combinazioni
     L = [x for x in range (2,n+1)]
     #print(l)
@@ -53,14 +53,17 @@ def dictGenerator2(n): # più veloce di quella originale e utilizza un po meno m
         combination.extend(map(list,itertools.combinations(L,l+2)))
     #filtro le combinazioni che hanno i al loro interno
     #print("_______")
-    
+
     #print(combination)
     #print("_____")
     #print("First part o dict generated in ", T.time() - Tp)
     Ts = T.time()
+    w = 0
     for i in range(2,n+1):
         comb = [x for x in combination if i in x]
+        w = w + len(comb)
         struct[i].extend(comb)
+    print("W",w)
     #print("FINAL: \n",struct)
     #print("Second part o dict generated in ", T.time() - Ts)
     print("This fun has used ",(memoryUsage(comb) + memoryUsage(struct) + memoryUsage(combination)) / (1024*1024), " MB")
@@ -90,7 +93,7 @@ def dictGenerator3(n):
         combination.extend(map(list,itertools.combinations(L,l+2)))
     #filtro le combinazioni che hanno i al loro interno
     #print("_______")
-    
+
     #print(combination)
     #print("_____")
     #print("First part o dict generated in ", T.time() - Tp)
@@ -102,7 +105,7 @@ def dictGenerator3(n):
                 if el == i:
                     struct[i].extend([x])
                     break
-                if el > i: 
+                if el > i:
                     break
 
     #print("FINAL: \n",struct)
@@ -111,19 +114,21 @@ def dictGenerator3(n):
     return struct
 
 
-n = 27
+'''n = 3
 
 print("n = ",n,"\n")
 
 print("dictGenerator2 computing ...\n")
 t0 = T.time()
 A = dictGenerator2(n)
+print(A)
 second_version = T.time() - t0
 print("=> dictGenerator2 has computed in ", second_version," <=\n")
-'''
+
 print("dictGenerator computing ...\n")
 t1 = T.time()
 B = dictGenerator(n)
+print(B)
 first_version = T.time() - t1
 print("=> dictGenerator has computed in ", first_version," <=")
 
@@ -135,6 +140,4 @@ else:
 if A == B:
     print("EQUALS")
 else:
-    print("DIFFERENT")
-
-'''
+    print("DIFFERENT")'''
