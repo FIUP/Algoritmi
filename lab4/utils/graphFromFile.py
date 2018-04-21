@@ -30,7 +30,6 @@ class graphFromFile:
 
         #lista dei nodi lista[indice]->[x,y]
         nodelist = []
-        N = self.Dimension
         for i in range(0, self.Dimension):
             x,y = f.readline().strip().split()[1:]
             nodelist.append([float(x), float(y)])
@@ -59,16 +58,17 @@ class graphFromFile:
                 source_long = self.CalcRadian(source[1])
                 dest_lat = self.CalcRadian(dest[0])
                 dest_long = self.CalcRadian(dest[1])
-                #calcolo la distanta
+
+                #calcolo la distanza
                 RRR = 6378.388
                 q1 = math.cos(source_long - dest_long)
                 q2 = math.cos(source_lat - dest_lat)
                 q3 = math.cos(source_lat + dest_lat)
-                dist = int(RRR * math.acos(0.5*((1.0+q1)*q2 - (1.0 - q1) * q3) ) + 1.0)
+                dist = int(math.modf(RRR * math.acos(0.5*((1.0+q1)*q2 - (1.0 - q1) * q3) ) + 1.0)[1])
                 return dist
 
     def CalcRadian(self, i):
-        deg = int(i)
+        deg = int(math.modf(i)[1])
         min = i - deg
         return (math.pi *(deg + 5*min/3.0)/180.0)
 
