@@ -31,7 +31,7 @@ def HKVisit(v,S,graph):
 
         return min_dist
 
-graph = graphFromFile("graphs/berlin52.tsp")
+graph = graphFromFile("graphs/gr202.tsp")
 res = HKTSP(graph)
 print("RESULT",res)
 
