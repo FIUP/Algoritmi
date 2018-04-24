@@ -13,7 +13,7 @@ def HKTSP(graph):
 def HKVisit(v,S,graph,t0):
 
 
-    if T.time() - t0 > 600: #dopo x secondi
+    if T.time() - t0 > 60: #dopo x secondi
         return inf
             #sys.exit("Esecuzione terminata")
     if S == {v}:
