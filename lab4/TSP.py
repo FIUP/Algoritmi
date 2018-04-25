@@ -27,7 +27,7 @@ def union(u,v,set_list):
 def kruskal(graph):
     A = set()
     set_list = [[x + 1] for x in range(graph.Dimension)]
-    print(set_list)
+    #print(set_list)
 
     weight_order_list = [] #ordina matrice adiacenze
     arc_order_list = []
@@ -68,10 +68,12 @@ def MSP(graph):
         color[i] = "white" 
 
     starting_node = None
-    for k in graph:
+    for k in graph: # estraggo la prima chiave del dizionario -> sarà il nodo dal quale iniziare a costruire l'albero
         starting_node = k
         break
-    return DFSVisited(graph,starting_node,[],color)
+    path = DFSVisited(graph,starting_node,[],color)
+    path.append(starting_node)
+    return path
 
 
 for filename in os.listdir("graphs/"):
@@ -79,5 +81,6 @@ for filename in os.listdir("graphs/"):
         graph = graphFromFile("graphs/"+filename)
         A = kruskal(graph)
         minimum_spanning_tree = MSP(A)
-        print("City: ", filename, "\n")
-        print("MIN SPANNING TREE: \n",minimum_spanning_tree)
+        print("City: ", filename)
+        print("MIN SPANNING TREE: \n",minimum_spanning_tree,"\n")
+        
