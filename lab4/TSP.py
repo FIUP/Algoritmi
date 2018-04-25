@@ -1,6 +1,18 @@
 from utils.graphFromFile import graphFromFile
 import bisect
+from collections import defaultdict
+import os
 
+
+def buildGraphFromSet(A):
+    final_graph = defaultdict(list)
+    for pair in A:
+        node1 = pair[0]
+        node2 = pair[1]
+        final_graph[node1].append(node2)
+        final_graph[node2].append(node1)
+    return final_graph
+    
 def findSet(node,set_list):
     for i in range (len(set_list)):
         if node in set_list[i]:
@@ -36,8 +48,36 @@ def kruskal(graph):
             A.add((u,v))
             union(u,v,set_list)
 
-    return A
+    return buildGraphFromSet(A)
 
-graph = graphFromFile("graphs/burma14.tsp")
-A = kruskal(graph)
-print("A",A)
+
+def DFSVisited(graph,u,visited,color):
+    color[u] = "gray"
+    visited.append(u)
+    for v in graph[u]:
+        if (color[v] == "white"):
+            visited = DFSVisited(graph,v,visited,color)
+    color[u] = "black"
+    return visited
+
+#find minimum spanning tree
+
+def MSP(graph):
+    color = dict()
+    for i in graph.keys():
+        color[i] = "white" 
+
+    starting_node = None
+    for k in graph:
+        starting_node = k
+        break
+    return DFSVisited(graph,starting_node,[],color)
+
+
+for filename in os.listdir("graphs/"):
+    if filename.endswith(".tsp"):
+        graph = graphFromFile("graphs/"+filename)
+        A = kruskal(graph)
+        minimum_spanning_tree = MSP(A)
+        print("City: ", filename, "\n")
+        print("MIN SPANNING TREE: \n",minimum_spanning_tree)
