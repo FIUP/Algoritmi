@@ -25,9 +25,9 @@ def kruskal(graph):
     A = set()
 
     dict_list = dict()
+    #dizionario con chiave il nodo e valore il testimone
     for x in range(graph.Dimension):
         dict_list[x+1] = x+1
-        #print(set_list)
 
     weight_order_list = [] #ordina matrice adiacenze
     arc_order_list = []
@@ -75,8 +75,9 @@ def MSP(graph):
     path.append(starting_node)
     return path
 
-
+tTot = T.time()
 for filename in os.listdir("graphs/"):
+
     if filename.endswith(".tsp"):
         t0 = T.time()
         graph = graphFromFile("graphs/"+filename)
@@ -85,3 +86,5 @@ for filename in os.listdir("graphs/"):
         print("Time", T.time() - t0)
         print("City: ", filename)
         print("MIN SPANNING TREE: \n",minimum_spanning_tree,"\n")
+
+print("TEMPO FINALE", T.time() - tTot)
