@@ -29,21 +29,20 @@ def kruskal(graph):
     for x in range(graph.Dimension):
         dict_list[x+1] = x+1
 
-    weight_order_list = [] #ordina matrice adiacenze
+
     arc_order_list = []
     for i in range(graph.Dimension):
         for j in range (i+1,graph.Dimension):
-            p = bisect.bisect(weight_order_list, graph.adj_list[j][i])
-            weight_order_list.insert(p, graph.adj_list[j][i])
-            arc_order_list.insert(p, (j+1,i+1))
+            arc_order_list.append((graph.adj_list[j][i],j+1,i+1))
+    arc_order_list.sort(key=lambda tup: tup[0])
+
 
     #print("W",weight_order_list)
     #print("A",arc_order_list)
     #print("LEN",len(order_list))
-
     for el in arc_order_list:
-        u = el[0]
-        v = el[1]
+        u = el[1]
+        v = el[2]
         if dict_list[u] != dict_list[v]:
             A.add((u,v))
             union(u,v,dict_list)
@@ -79,12 +78,20 @@ tTot = T.time()
 for filename in os.listdir("graphs/"):
 
     if filename.endswith(".tsp"):
+        print("City: ", filename)
         t0 = T.time()
         graph = graphFromFile("graphs/"+filename)
+
         A = kruskal(graph)
+
         minimum_spanning_tree = MSP(A)
+
+        result = 0
+        for i in range(len(minimum_spanning_tree)-1):
+            result = result + graph.adj_list[minimum_spanning_tree[i] - 1][minimum_spanning_tree[i+1] - 1]
+
         print("Time", T.time() - t0)
-        print("City: ", filename)
+        print("RESULT", result)
         print("MIN SPANNING TREE: \n",minimum_spanning_tree,"\n")
 
 print("TEMPO FINALE", T.time() - tTot)

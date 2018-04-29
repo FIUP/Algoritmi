@@ -19,15 +19,19 @@ def nearestNeighbor(graph, insert, toInsert):
 
 for filename in os.listdir("graphs/"):
     if filename.endswith(".tsp"):
+        print("FileName ", filename)
         t0 = T.time()
         graph = graphFromFile("graphs/"+filename)
+        print("Creazione time", T.time() - t0)
         insert = [1]
         toInsert = [x for x in range(2,graph.Dimension + 1)]
         result = 0
+        t1 = T.time();
         for i in range (1,graph.Dimension):
             result = result + nearestNeighbor(graph,insert,toInsert)
+        print("For time", T.time() - t1)
 
         result = result + graph.adj_list[insert[0] - 1][insert[-1] - 1]
-        print("FileName ", filename)
+
         print("Result ", result)
         print("Tempo di esecuzione ",T.time() - t0)
