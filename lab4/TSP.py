@@ -74,7 +74,7 @@ def MSP(graph):
     path.append(starting_node)
     return path
 
-tTot = T.time()
+'''tTot = T.time()
 for filename in os.listdir("graphs/"):
 
     if filename.endswith(".tsp"):
@@ -94,4 +94,4 @@ for filename in os.listdir("graphs/"):
         print("RESULT", result)
         print("MIN SPANNING TREE: \n",minimum_spanning_tree,"\n")
 
-print("TEMPO FINALE", T.time() - tTot)
+print("TEMPO FINALE", T.time() - tTot)'''

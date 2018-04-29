@@ -17,6 +17,8 @@ def nearestNeighbor(graph, insert, toInsert):
 
     return min
 
+
+'''t = T.time()
 for filename in os.listdir("graphs/"):
     if filename.endswith(".tsp"):
         print("FileName ", filename)
@@ -35,3 +37,4 @@ for filename in os.listdir("graphs/"):
 
         print("Result ", result)
         print("Tempo di esecuzione ",T.time() - t0)
+print("Totale ",T.time() - t)'''

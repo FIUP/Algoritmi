@@ -40,16 +40,3 @@ def HKVisit(v,S,graph,t0,V):
         #    sys.exit("Esecuzione terminata")
 
         return min_dist
-
-graph = graphFromFile("graphs/berlin52.tsp")
-
-res = HKTSP(graph)
-#V = frozenset([x for x in range(1,graph.Dimension + 1)])
-#print(graph.d[(1,V)])
-print("RESULT",res)
-
-'''# itero su tutti i file in graphs che terminano con .tsp
-for filename in os.listdir("graphs/"):
-    if filename.endswith(".tsp"):
-        graph = graphFromFile("graphs/"+filename)
-        res = HKTSP(graph)'''
