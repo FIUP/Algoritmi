@@ -11,11 +11,11 @@ for filename in os.listdir("graphs/"):
         graph = graphFromFile("graphs/"+filename)
 
         #Held Karp algorithm
-        '''tHeld = T.time()
+        Held = T.time()
         result_heldKarp = HKTSP(graph)
         print("Result Held Karp", result_heldKarp)
-        print("Time heldKarp", T.time() - tHeld)'''
-
+        print("Time heldKarp", T.time() - Held)
+        
         #Nearest Neighbor algorithm
         tNN = T.time()
         insert = [1]
