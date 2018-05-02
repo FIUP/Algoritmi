@@ -13,9 +13,9 @@ for filename in os.listdir("graphs/"):
         #Held Karp algorithm
         Held = T.time()
         result_heldKarp = HKTSP(graph)
-        print("Result Held Karp", result_heldKarp)
         print("Time heldKarp", T.time() - Held)
-        
+        print("Result Held Karp", result_heldKarp)
+
         #Nearest Neighbor algorithm
         tNN = T.time()
         insert = [1]
@@ -25,8 +25,8 @@ for filename in os.listdir("graphs/"):
             result_NN = result_NN + nearestNeighbor(graph,insert,toInsert)
 
         result_NN = result_NN + graph.adj_list[insert[0] - 1][insert[-1] - 1]
-        print("Result Nearest Neighbor", result_NN)
         print("Time Nearest Neighbor", T.time() - tNN)
+        print("Result Nearest Neighbor", result_NN)
 
         #2 approssimato algorithm
         tK = T.time()
