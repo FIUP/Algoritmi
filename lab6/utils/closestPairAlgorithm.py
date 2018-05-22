@@ -73,5 +73,5 @@ def fastClosestPair(P,S):
     
     Sl, Sr = split(S,Pl,Pr)
     (d,i,j) = min(fastClosestPair(Pl,Sl),fastClosestPair(Pr,Sr))
-    mid = (Pl[len(Pl) - 1] + Pr[0]) / 2 # dubbioso ...
+    mid = (Pl[len(Pl) - 1][0] + Pr[0][0]) / 2 # dubbioso ...
     return min((d,i,j), closestPairStrip(S,mid,d))
