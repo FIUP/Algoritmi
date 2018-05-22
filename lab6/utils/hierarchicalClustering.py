@@ -1,6 +1,5 @@
-from utils.readFromFile import readFromFile 
 from collections import defaultdict
-from ClosestPairAlgorithm import fastClosestPair 
+from closestPairAlgorithm import fastClosestPair 
 
 def calcCenter(P):
        sum_x, sum_y = 0.0, 0.0
@@ -20,8 +19,12 @@ def hierarchicalClustering(P, k):
     for i in P:
         clusters_dict[i] = i
     
+    L = clusters_dict.keys() # Lista dei centri
+    centers_list_ord_x = sorted(L, key = lambda coord: coord[0]) # lista dei centri ordinata secondo l'asse x
+    centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
+
     while len(clusters_dict) > k:
-        (d,i,j) = fastClosestPair(clusters_dict.keys())
+        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)
         C = clusters_dict[i].extend(clusters_dict[j]) # todo: decidere se appendere il più corto al più lungo
         clusters_dict[calcCenter(C)] = C
         del clusters_dict[i]

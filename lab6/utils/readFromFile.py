@@ -10,6 +10,5 @@ def readFromFile(path):
             people = int(row[3])
             cancer_sil = float(row[4])
             county_data[id] = [(x,y),people,cancer_sil]
-            break
 
     return county_data
