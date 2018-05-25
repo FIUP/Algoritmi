@@ -1,5 +1,7 @@
 from collections import defaultdict
 from closestPairAlgorithm import fastClosestPair 
+from closestPairAlgorithm import calcDistance
+import math
 
 def calcCenter(P):
        sum_x, sum_y = 0.0, 0.0
@@ -31,5 +33,40 @@ def hierarchicalClustering(P, k):
         del clusters_dict[j]
 
     return clusters_dict
+
+# C[i] 
+def KMeansClustering(P,C,k,q): # C: Lista dei centri di cardinalita k
+    n = len(P)
+    clusters_dict = defaultdict(list)
+
+    for i in range(q):
+        for z in range(k):
+            clusters_dict[z] = []
+        
+        for j in range(n):
+            l = closestPoint(P[j],C)
+            clusters_dict[l].append(P[j])
+        
+        for f in range(k):
+            C[f] = calcCenter(clusters_dict[f])
+
+    for i in clusters_dict.keys():
+        clusters_dict[C[i]] = clusters_dict[i]
+        del clusters_dict[i]
+
+    return clusters_dict
+
+def closestPoint(p,C):
+    d = math.inf
+    l = -1
+    n = len(C)
+    for i in range(n): # confronto p con tutti i centri in C
+        distance = calcDistance(p,C[i])
+        if distance < d:
+            l = i # aggiorno la nuova distanza
+        
+    return l
+            
+    
 
 
