@@ -1,4 +1,6 @@
 import math
+import time as T
+
 
 # calcola la distanza tra p1 e p2
 def calcDistance(p1,p2):
@@ -9,6 +11,7 @@ def calcDistance(p1,p2):
     return math.pow(math.pow(x2-x1,2) + math.pow(y2-y1,2),0.5)
 
 def split(S, Pl, Pr):
+    t0 = T.time()
     n = len(S)
     Sl, Sr = [], []
     for i in range(n):
@@ -16,6 +19,7 @@ def split(S, Pl, Pr):
             Sl.append(S[i])
         else:
             Sr.append(S[i])
+    print(T.time() - t0)
 
     return Sl,Sr
 
@@ -32,7 +36,7 @@ def closestPairStrip(S,mid,d):
     for u in range(k-1): # qui e sotto potrebbero esserci problemi con gli indici... forse è k-1, u+4 e n
         for v in range(u+1, min(u+4,k)):
             (d,i,j) = min((d,i,j), (calcDistance(Sp[u], Sp[v]),Sp[u],Sp[v]))
-
+    
     return (d,i,j)
 
 
@@ -59,23 +63,10 @@ def fastClosestPair(P,S):
         return slowClosestPair(P)
 
     m = math.ceil(n / 2) # calcolo il punto di divisione tra Pl e Pr
-
     # costruisco Pl e Pr
-    z = 0
-    Pl, Pr = [], []
-    '''
-    while P[z] < m: # costruisco Pl
-        Pl.append(P[z])
-        z = z + 1
-    '''
-    Pl = P[:m] # Pl
-    Pr = P[m:] # Il rimanente sarà Pr
-
+    Pl, Pr = P[:m], P[m:]
     Sl, Sr = split(S,Pl,Pr)
     (d,i,j) = min(fastClosestPair(Pl,Sl),fastClosestPair(Pr,Sr))
     mid = (Pl[len(Pl) - 1][0] + Pr[0][0]) / 2
     (d1,i1,j1) = closestPairStrip(S,mid,d)
-    '''if d < d1:
-        return (d,i,j)
-    return (d1,i1,j1)'''
     return min((d,i,j), closestPairStrip(S,mid,d))

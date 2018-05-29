@@ -25,21 +25,20 @@ def hierarchicalClustering(P, k):
     centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
 
     while len(clusters_dict) > k:
-        print(len(clusters_dict))
-        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)
+        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)        
         C = clusters_dict[i] + (clusters_dict[j]) # todo: decidere se appendere il più corto al più lungo
+
         clusters_dict[calcCenter(C)] = C
         del clusters_dict[i]
         del clusters_dict[j]
-
         L = clusters_dict.keys() # Lista dei centri
+
         centers_list_ord_x = sorted(L, key = lambda coord: coord[0]) # lista dei centri ordinata secondo l'asse x
         centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
-
     return clusters_dict
 
 # C[i]
-def KMeansClustering(P,C,k,q): # C: Lista dei centri di cardinalita k
+def KMeansClustering(P,C,k,q): #
     n = len(P)
     clusters_dict = defaultdict(list)
 
@@ -52,9 +51,10 @@ def KMeansClustering(P,C,k,q): # C: Lista dei centri di cardinalita k
             clusters_dict[l].append(P[j])
 
         for f in range(k):
-            C[f] = calcCenter(clusters_dict[f])
+            if(clusters_dict[f]):
+                C[f] = calcCenter(clusters_dict[f])
 
-    for i in clusters_dict.keys():
+    for i in range(k): # prima iteravo su clusters_dict.keys(), ma succedeva un errore run-time. In questo modo la pace sembra ristabilita
         clusters_dict[C[i]] = clusters_dict[i]
         del clusters_dict[i]
 
@@ -67,6 +67,7 @@ def closestPoint(p,C):
     for i in range(n): # confronto p con tutti i centri in C
         distance = calcDistance(p,C[i])
         if distance < d:
+            d = distance
             l = i # aggiorno la nuova distanza
 
     return l
