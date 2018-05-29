@@ -11,7 +11,6 @@ def calcDistance(p1,p2):
     return math.pow(math.pow(x2-x1,2) + math.pow(y2-y1,2),0.5)
 
 def split(S, Pl, Pr):
-    t0 = T.time()
     n = len(S)
     Sl, Sr = [], []
     for i in range(n):
@@ -19,7 +18,6 @@ def split(S, Pl, Pr):
             Sl.append(S[i])
         else:
             Sr.append(S[i])
-    print(T.time() - t0)
 
     return Sl,Sr
 
@@ -62,7 +60,7 @@ def fastClosestPair(P,S):
     if n <= 3:
         return slowClosestPair(P)
 
-    m = math.ceil(n / 2) # calcolo il punto di divisione tra Pl e Pr
+    m = math.floor(n / 2) # calcolo il punto di divisione tra Pl e Pr
     # costruisco Pl e Pr
     Pl, Pr = P[:m], P[m:]
     Sl, Sr = split(S,Pl,Pr)

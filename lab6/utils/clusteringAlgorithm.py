@@ -25,7 +25,7 @@ def hierarchicalClustering(P, k):
     centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
 
     while len(clusters_dict) > k:
-        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)        
+        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)  
         C = clusters_dict[i] + (clusters_dict[j]) # todo: decidere se appendere il più corto al più lungo
 
         clusters_dict[calcCenter(C)] = C
