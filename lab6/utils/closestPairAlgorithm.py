@@ -16,7 +16,7 @@ def split(S, Pl, Pr):
             Sl.append(S[i])
         else:
             Sr.append(S[i])
-    
+
     return Sl,Sr
 
 def closestPairStrip(S,mid,d):
@@ -25,12 +25,12 @@ def closestPairStrip(S,mid,d):
     k = 0
     for i in range(n):
         if abs(S[i][0] - mid) < d: # S[i][0] è l'i-esima coordinata x
-            Sp[k] = S[i]
+            Sp.append(S[i])
             k = k + 1
-    
+
     (d,i,j) = (math.inf,-1,-1)
     for u in range(k-1): # qui e sotto potrebbero esserci problemi con gli indici... forse è k-1, u+4 e n
-        for v in range(u+1, min(u+4,n)):
+        for v in range(u+1, min(u+4,k)):
             (d,i,j) = min((d,i,j), (calcDistance(Sp[u], Sp[v]),Sp[u],Sp[v]))
 
     return (d,i,j)
@@ -38,7 +38,7 @@ def closestPairStrip(S,mid,d):
 
 # ritorna gli indici (cioè i centri) dei due cluster più vicini
 # i due cluster più vicini sono quelli con la distanza minore tra i due centri
-# in input vuole la lista dei centri 
+# in input vuole la lista dei centri
 def slowClosestPair(P):
     (d,i,j) = (math.inf,-1,-1)
     n = len(P)
@@ -57,9 +57,9 @@ def fastClosestPair(P,S):
     n = len(P)
     if n <= 3:
         return slowClosestPair(P)
-    
+
     m = math.ceil(n / 2) # calcolo il punto di divisione tra Pl e Pr
-    
+
     # costruisco Pl e Pr
     z = 0
     Pl, Pr = [], []
@@ -70,8 +70,12 @@ def fastClosestPair(P,S):
     '''
     Pl = P[:m] # Pl
     Pr = P[m:] # Il rimanente sarà Pr
-    
+
     Sl, Sr = split(S,Pl,Pr)
     (d,i,j) = min(fastClosestPair(Pl,Sl),fastClosestPair(Pr,Sr))
-    mid = (Pl[len(Pl) - 1][0] + Pr[0][0]) / 2 
+    mid = (Pl[len(Pl) - 1][0] + Pr[0][0]) / 2
+    (d1,i1,j1) = closestPairStrip(S,mid,d)
+    '''if d < d1:
+        return (d,i,j)
+    return (d1,i1,j1)'''
     return min((d,i,j), closestPairStrip(S,mid,d))
