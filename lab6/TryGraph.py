@@ -1,18 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.misc import imread
+import itertools
 
-np.random.seed(0)
-x = [720.281573781,76.0382837186,52.6171444847 ]
-y = [ 440.436162917,340.420376302, 262.707477827]
-center = [100,200];
-img = imread("data/USA_Counties.png")
-plt.scatter(x,y,zorder=1, cmap = plt.get_cmap("viridis"))
+def ClusterGraph(cluster_dict):
 
-for i in range(len(x)):
-    k = [x[i],center[0]]
-    j = [y[i],center[1]]
-    plt.plot(k,j, marker = 'o', color = "green")
-plt.scatter(center[0],center[1], s = 100, color="green")
-plt.imshow(img,zorder=0)
-plt.show()
+    colors = itertools.cycle(["cyan", "b", "g","brown","orange","hotpink","yellow","r",
+    "magenta","gold","olive","darkorchid","seagreen","crimson","midnightblue"])
+    img = imread("data/USA_Counties.png")
+    for k in cluster_dict.keys():
+        c = next(colors)
+        plt.scatter(k[0],k[1], s = 100, color = c, edgecolors = "black", zorder =2)
+        for node in cluster_dict[k]:
+            f = [node[0],k[0]]
+            g = [node[1],k[1]]
+            plt.scatter(f,g,marker='o', color = c, zorder =1, s = 15)
+    plt.imshow(img,zorder=0)
+    plt.show()

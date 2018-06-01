@@ -1,6 +1,7 @@
 from utils.readFromFile import *
 from utils.closestPairAlgorithm import *
 from utils.clusteringAlgorithm import *
+from TryGraph import *
 
 #creazione data-set
 minDataSet = readFromFile("data/unifiedCancerData_111.csv")
@@ -34,8 +35,8 @@ for el in Cp:
 kmeans_clusters_dict = KMeansClustering(P,C,k,q)
 print("\nK-Means: \n",kmeans_clusters_dict)
 
+ClusterGraph(kmeans_clusters_dict)
+
 for k in kmeans_clusters_dict.keys():
     if not kmeans_clusters_dict[k]:
         print("\n-- Cluster with center",k," is empty. --")
-
-
