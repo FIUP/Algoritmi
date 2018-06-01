@@ -1,6 +1,34 @@
 from collections import defaultdict
 from .closestPairAlgorithm import *
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.misc import imread
+import itertools
+
+def ClusterGrap(center):
+
+    colors = itertools.cycle(["cyan", "b", "g","brown","orange","hotpink","yellow","r",
+    "magenta","gold","olive","darkorchid","seagreen","crimson","midnightblue"])
+    img = imread("data/USA_Counties.png")
+    for k in center:
+        c = next(colors)
+        plt.scatter(k[0],k[1], s = 100, color = c, edgecolors = "black", zorder =2)
+
+    plt.imshow(img,zorder=0)
+    plt.show()
+
+def clusterDistortion(cluster, dataSet):
+    error = 0
+
+    for center, list in cluster.items():
+        for point in list:
+            population = dataSet[point][0]
+            distance_from_center = calcDistance(point,center)
+
+            error = error + (population * (math.pow(distance_from_center,2)))
+
+    return error
 
 def calcCenter(P):
        sum_x, sum_y = 0.0, 0.0
@@ -25,7 +53,7 @@ def hierarchicalClustering(P, k):
     centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
 
     while len(clusters_dict) > k:
-        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)  
+        (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)
         C = clusters_dict[i] + (clusters_dict[j]) # todo: decidere se appendere il più corto al più lungo
 
         clusters_dict[calcCenter(C)] = C
@@ -53,6 +81,8 @@ def KMeansClustering(P,C,k,q): #
         for f in range(k):
             if(clusters_dict[f]):
                 C[f] = calcCenter(clusters_dict[f])
+
+        #ClusterGrap(C)
 
     for i in range(k): # prima iteravo su clusters_dict.keys(), ma succedeva un errore run-time. In questo modo la pace sembra ristabilita
         clusters_dict[C[i]] = clusters_dict[i]

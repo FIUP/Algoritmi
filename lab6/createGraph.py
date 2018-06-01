@@ -17,3 +17,10 @@ def ClusterGraph(cluster_dict):
             plt.scatter(f,g,marker='o', color = c, zorder =1, s = 15)
     plt.imshow(img,zorder=0)
     plt.show()
+
+def errorFunction(h,k):
+    plt.grid()
+    plt.plot([x for x in range(6,21)], h,  label = "Hierarchical")
+    plt.plot([x for x in range(6,21)], k, label = "Kmeans")
+    plt.legend()
+    plt.show()

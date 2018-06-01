@@ -9,6 +9,6 @@ def readFromFile(path):
             x, y = float(row[1]), float(row[2])
             people = int(row[3])
             cancer_sil = float(row[4])
-            county_data[id] = [(x,y),people,cancer_sil]
+            county_data[(x,y)] = [people,cancer_sil]
 
     return county_data
