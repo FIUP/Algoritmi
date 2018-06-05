@@ -34,7 +34,7 @@ def closestPairStrip(S,mid,d):
     for u in range(k-1): # qui e sotto potrebbero esserci problemi con gli indici... forse è k-1, u+4 e n
         for v in range(u+1, min(u+4,k)):
             (d,i,j) = min((d,i,j), (calcDistance(Sp[u], Sp[v]),Sp[u],Sp[v]))
-    
+
     return (d,i,j)
 
 
@@ -66,5 +66,4 @@ def fastClosestPair(P,S):
     Sl, Sr = split(S,Pl,Pr)
     (d,i,j) = min(fastClosestPair(Pl,Sl),fastClosestPair(Pr,Sr))
     mid = (Pl[len(Pl) - 1][0] + Pr[0][0]) / 2
-    (d1,i1,j1) = closestPairStrip(S,mid,d)
     return min((d,i,j), closestPairStrip(S,mid,d))
