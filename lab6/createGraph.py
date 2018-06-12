@@ -18,9 +18,12 @@ def ClusterGraph(cluster_dict):
     plt.imshow(img,zorder=0)
     plt.show()
 
-def errorFunction(h,k):
+def errorFunction(h,k,xlabel,ylabel,title):
     plt.grid()
     plt.plot([x for x in range(6,21)], h,  label = "Hierarchical")
     plt.plot([x for x in range(6,21)], k, label = "Kmeans")
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
     plt.legend()
     plt.show()

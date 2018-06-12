@@ -6,17 +6,17 @@ import matplotlib.pyplot as plt
 from scipy.misc import imread
 import itertools
 
-def ClusterGrap(center):
+def maxPopulation(k, dataSet):
+    Cp, C = [], []
+    for i in dataSet.keys():
+        Cp.append((i,dataSet[i][0]))
 
-    colors = itertools.cycle(["cyan", "b", "g","brown","orange","hotpink","yellow","r",
-    "magenta","gold","olive","darkorchid","seagreen","crimson","midnightblue"])
-    img = imread("data/USA_Counties.png")
-    for k in center:
-        c = next(colors)
-        plt.scatter(k[0],k[1], s = 100, color = c, edgecolors = "black", zorder =2)
+    Cp = sorted(Cp,key = lambda people: people[1],reverse = True)
+    Cp = Cp[:k]
+    for el in Cp:
+        C.append(el[0])
 
-    plt.imshow(img,zorder=0)
-    plt.show()
+    return C
 
 def clusterDistortion(cluster, dataSet):
     error = 0
@@ -41,16 +41,21 @@ def calcCenter(P):
 
 
 
-def hierarchicalClustering(P, k):
+def hierarchicalClustering(P, k, flag):
     # dizionario che ha come chiave il centro del cluster e come valore l'insieme delle coordinate nel cluster
-    clusters_dict = defaultdict(list)
+    if not flag:
+        clusters_dict = defaultdict(list)
 
-    for i in P:
-        clusters_dict[i] = [i]
+        for i in P:
+            clusters_dict[i] = [i]
+
+    else:
+        clusters_dict = P
 
     L = clusters_dict.keys() # Lista dei centri
     centers_list_ord_x = sorted(L, key = lambda coord: coord[0]) # lista dei centri ordinata secondo l'asse x
     centers_list_ord_y = sorted(L, key = lambda coord: coord[1]) # lista dei centri ordinata secondo l'asse y
+
 
     while len(clusters_dict) > k:
         (d,i,j) = fastClosestPair(centers_list_ord_x, centers_list_ord_y)
@@ -67,22 +72,19 @@ def hierarchicalClustering(P, k):
 
 # C[i]
 def KMeansClustering(P,C,k,q): #
-    n = len(P)
     clusters_dict = defaultdict(list)
 
     for i in range(q):
         for z in range(k):
             clusters_dict[z] = []
 
-        for j in range(n):
-            l = closestPoint(P[j],C)
-            clusters_dict[l].append(P[j])
+        for pair in P:
+            l = closestPoint(pair,C)
+            clusters_dict[l].append(pair)
 
         for f in range(k):
             if(clusters_dict[f]):
                 C[f] = calcCenter(clusters_dict[f])
-
-        #ClusterGrap(C)
 
     for i in range(k): # prima iteravo su clusters_dict.keys(), ma succedeva un errore run-time. In questo modo la pace sembra ristabilita
         clusters_dict[C[i]] = clusters_dict[i]
