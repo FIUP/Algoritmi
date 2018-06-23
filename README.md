@@ -9,8 +9,8 @@ Gli esercizi devono essere compilati in Python3
 
 Questi laboratori sono stati giudicati dal docente con le seguenti valutazioni.
 
-Lab1:   85
-Lab2:   100
-Lab3:   95
-Lab4-5: 95
-Lab6:   100
+Lab1:   85;
+Lab2:   100;
+Lab3:   95;
+Lab4-5: 95;
+Lab6:   100.
