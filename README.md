@@ -1,12 +1,15 @@
 # Algoritmi
 
-Repo di lavoro per gli esercizi del corso di Algoritmi della LM in Informatica.
-UniPD, A.A. 17/18.
+Repo dedicata al corso di Algoritmi della laurea magistrale in Informatica.
+
+
+
+### AA1718/BottaroCarlinTricomi
 Gli esercizi sono stati svolti da Mattia Bottaro, Mauro Carlin e Pier Paolo Tricomi.
 
 Gli esercizi devono essere compilati in Python3
 
-# Voti
+##### Voti ottenuti
 
 Questi laboratori sono stati giudicati dal docente con le seguenti valutazioni.
 
